@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 export default function Hero() {
   return (
-    <section className="relative h-[80vh] md:h-[80vh] w-full overflow-hidden bg-bg">
+    <section className="relative h-[80vh] md:h-[90vh] w-full overflow-hidden bg-bg">
       <div className="absolute inset-0 z-0">
         <video
           className="h-full w-full object-cover"

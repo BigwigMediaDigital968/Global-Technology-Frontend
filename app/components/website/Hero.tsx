@@ -84,11 +84,11 @@ export default function Hero() {
             visible: { opacity: 1 },
           }}
         >
-          <button className="rounded-md bg-accent px-8 py-4 font-semibold text-bg shadow-glow cursor-pointer transition hover:scale-105">
+          <button className="rounded-md bg-accent hover:bg-amber-200 hover:text-black px-8 py-4 border-2 font-semibold text-bg shadow-glow cursor-pointer transition hover:scale-105">
             Get Quote
           </button>
 
-          <button className="rounded-md border border-accent px-8 py-4 text-accent transition cursor-pointer hover:bg-accent hover:text-bg">
+          <button className="rounded-md border px-8 py-4 bg-amber-200 text-black text-accent transition cursor-pointer hover:bg-transparent hover:text-white hover:border-amber-50 font-semibold border-black/50 transition hover:scale-105">
             View Products
           </button>
         </motion.div>

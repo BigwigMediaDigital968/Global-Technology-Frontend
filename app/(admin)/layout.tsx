@@ -3,7 +3,16 @@
 import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, Loader2 } from "lucide-react";
+import { 
+  ChevronDown, 
+  Loader2, 
+  LayoutDashboard, 
+  Users, 
+  Package, 
+  Library, 
+  Mail,
+  LogOut
+} from "lucide-react";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -12,6 +21,24 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [activePage, setActivePage] = useState("dashboard");
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
+
+  // Sync activePage with pathname
+  useEffect(() => {
+    if (pathname.includes("/admin-dashboard")) {
+      setActivePage("dashboard");
+    } else if (pathname.includes("/products")) {
+      setActivePage(pathname.includes("/add") ? "addProduct" : "productList");
+      setOpenMenu("products");
+    } else if (pathname.includes("/leads")) {
+      setActivePage("leads");
+    } else if (pathname.includes("/collection")) {
+      setActivePage(pathname.includes("/create") ? "createCollection" : "collectionList");
+      setOpenMenu("collection");
+    } else if (pathname.includes("/newsletter")) {
+      setActivePage(pathname.includes("/send-email") ? "sendEmail" : "emailList");
+      setOpenMenu("newsletter");
+    }
+  }, [pathname]);
 
   // 🔐 Protect Admin Panel
   useEffect(() => {
@@ -73,6 +100,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     return <>{children}</>;
   }
 
+  const navigate = (path: string, page: string) => {
+    setActivePage(page);
+    router.push(path);
+  };
+
   const renderContent = () => {
     switch (activePage) {
       case "dashboard":
@@ -97,36 +129,48 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   };
 
   return (
-    <div className="flex min-h-screen bg-[#0d0d0d] text-white">
+    <div className="flex min-h-screen bg-black text-white">
 
       {/* Sidebar */}
-      <aside className="w-64 bg-[#111] border-r border-white/10 p-6">
-        <h2 className="text-xl font-bold mb-10">Admin Panel</h2>
+      <aside className="w-[280px] h-screen sticky top-0 bg-[#0a0a0a] border-r border-white/5 flex flex-col">
+        <div className="p-8 flex flex-col items-center">
+          <div className="w-24 h-24 rounded-full border-2 border-white/20 flex items-center justify-center mb-4">
+            <span className="text-4xl font-serif">GT</span>
+          </div>
+          <h2 className="text-2xl font-bold tracking-widest uppercase"> </h2>
+        </div>
 
-        <nav className="space-y-4 text-sm">
-
+        <nav className="flex-1 px-4 space-y-2 overflow-y-auto custom-scrollbar">
           {/* Dashboard */}
           <button
-            onClick={() => setActivePage("dashboard")}
-            className={`w-full text-left px-4 py-2 rounded-lg transition ${
+            onClick={() => navigate("/admin-dashboard", "dashboard")}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${
               activePage === "dashboard"
-                ? "bg-white text-black font-semibold"
-                : "hover:bg-white/10"
+                ? "bg-[#c5a37e] text-black font-bold shadow-lg"
+                : "text-gray-400 hover:bg-white/5 hover:text-white"
             }`}
           >
-            Dashboard
+            <LayoutDashboard size={20} />
+            <span>Dashboard</span>
           </button>
 
           {/* Products */}
           <div>
             <button
               onClick={() => toggleMenu("products")}
-              className="flex justify-between items-center w-full px-4 py-2 rounded-lg hover:bg-white/10"
+              className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-300 ${
+                pathname.includes("/products") && activePage !== "leads"
+                  ? "text-white bg-white/5"
+                  : "text-gray-400 hover:bg-white/5 hover:text-white"
+              }`}
             >
-              <span>Products</span>
+              <div className="flex items-center gap-3">
+                <Package size={20} />
+                <span>Products</span>
+              </div>
               <ChevronDown
                 size={16}
-                className={`transition-transform ${
+                className={`transition-transform duration-300 ${
                   openMenu === "products" ? "rotate-180" : ""
                 }`}
               />
@@ -139,25 +183,24 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   initial="hidden"
                   animate="visible"
                   exit="exit"
-                  className="ml-4 mt-2 space-y-2"
+                  className="ml-9 mt-1 space-y-1 overflow-hidden"
                 >
                   <button
-                    onClick={() => setActivePage("productList")}
-                    className={`block w-full text-left px-3 py-1.5 rounded ${
+                    onClick={() => navigate("/products", "productList")}
+                    className={`block w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${
                       activePage === "productList"
-                        ? "bg-white text-black"
-                        : "hover:bg-white/5"
+                        ? "text-[#c5a37e] font-bold"
+                        : "text-gray-500 hover:text-white"
                     }`}
                   >
                     Product List
                   </button>
-
                   <button
-                    onClick={() => setActivePage("addProduct")}
-                    className={`block w-full text-left px-3 py-1.5 rounded ${
+                    onClick={() => navigate("/products/add", "addProduct")}
+                    className={`block w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${
                       activePage === "addProduct"
-                        ? "bg-white text-black"
-                        : "hover:bg-white/5"
+                        ? "text-[#c5a37e] font-bold"
+                        : "text-gray-500 hover:text-white"
                     }`}
                   >
                     Add New Product
@@ -169,26 +212,34 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
           {/* Leads */}
           <button
-            onClick={() => setActivePage("leads")}
-            className={`w-full text-left px-4 py-2 rounded-lg transition ${
+            onClick={() => navigate("/leads", "leads")}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${
               activePage === "leads"
-                ? "bg-white text-black font-semibold"
-                : "hover:bg-white/10"
+                ? "bg-[#c5a37e] text-black font-bold shadow-lg"
+                : "text-gray-400 hover:bg-white/5 hover:text-white"
             }`}
           >
-            Leads
+            <Users size={20} />
+            <span>Leads</span>
           </button>
 
           {/* Collection */}
           <div>
             <button
               onClick={() => toggleMenu("collection")}
-              className="flex justify-between items-center w-full px-4 py-2 rounded-lg hover:bg-white/10"
+              className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-300 ${
+                pathname.includes("/collection")
+                  ? "text-white bg-white/5"
+                  : "text-gray-400 hover:bg-white/5 hover:text-white"
+              }`}
             >
-              <span>Collection</span>
+              <div className="flex items-center gap-3">
+                <Library size={20} />
+                <span>Collection</span>
+              </div>
               <ChevronDown
                 size={16}
-                className={`transition-transform ${
+                className={`transition-transform duration-300 ${
                   openMenu === "collection" ? "rotate-180" : ""
                 }`}
               />
@@ -201,25 +252,24 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   initial="hidden"
                   animate="visible"
                   exit="exit"
-                  className="ml-4 mt-2 space-y-2"
+                  className="ml-9 mt-1 space-y-1 overflow-hidden"
                 >
                   <button
-                    onClick={() => setActivePage("collectionList")}
-                    className={`block w-full text-left px-3 py-1.5 rounded ${
+                    onClick={() => navigate("/collection", "collectionList")}
+                    className={`block w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${
                       activePage === "collectionList"
-                        ? "bg-white text-black"
-                        : "hover:bg-white/5"
+                        ? "text-[#c5a37e] font-bold"
+                        : "text-gray-500 hover:text-white"
                     }`}
                   >
                     Collection List
                   </button>
-
                   <button
-                    onClick={() => setActivePage("createCollection")}
-                    className={`block w-full text-left px-3 py-1.5 rounded ${
+                    onClick={() => navigate("/collection/create", "createCollection")}
+                    className={`block w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${
                       activePage === "createCollection"
-                        ? "bg-white text-black"
-                        : "hover:bg-white/5"
+                        ? "text-[#c5a37e] font-bold"
+                        : "text-gray-500 hover:text-white"
                     }`}
                   >
                     Create Collection
@@ -233,12 +283,19 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div>
             <button
               onClick={() => toggleMenu("newsletter")}
-              className="flex justify-between items-center w-full px-4 py-2 rounded-lg hover:bg-white/10"
+              className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-300 ${
+                pathname.includes("/newsletter")
+                  ? "text-white bg-white/5"
+                  : "text-gray-400 hover:bg-white/5 hover:text-white"
+              }`}
             >
-              <span>Newsletter</span>
+              <div className="flex items-center gap-3">
+                <Mail size={20} />
+                <span>Newsletter</span>
+              </div>
               <ChevronDown
                 size={16}
-                className={`transition-transform ${
+                className={`transition-transform duration-300 ${
                   openMenu === "newsletter" ? "rotate-180" : ""
                 }`}
               />
@@ -251,25 +308,24 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   initial="hidden"
                   animate="visible"
                   exit="exit"
-                  className="ml-4 mt-2 space-y-2"
+                  className="ml-9 mt-1 space-y-1 overflow-hidden"
                 >
                   <button
-                    onClick={() => setActivePage("emailList")}
-                    className={`block w-full text-left px-3 py-1.5 rounded ${
+                    onClick={() => navigate("/newsletter", "emailList")}
+                    className={`block w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${
                       activePage === "emailList"
-                        ? "bg-white text-black"
-                        : "hover:bg-white/5"
+                        ? "text-[#c5a37e] font-bold"
+                        : "text-gray-500 hover:text-white"
                     }`}
                   >
                     Email List
                   </button>
-
                   <button
-                    onClick={() => setActivePage("sendEmail")}
-                    className={`block w-full text-left px-3 py-1.5 rounded ${
+                    onClick={() => navigate("/newsletter/send-email", "sendEmail")}
+                    className={`block w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${
                       activePage === "sendEmail"
-                        ? "bg-white text-black"
-                        : "hover:bg-white/5"
+                        ? "text-[#c5a37e] font-bold"
+                        : "text-gray-500 hover:text-white"
                     }`}
                   >
                     Send Email
@@ -278,21 +334,25 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               )}
             </AnimatePresence>
           </div>
+        </nav>
 
-          {/* Logout */}
+        {/* Logout */}
+        <div className="p-4 border-t border-white/5">
           <button
             onClick={handleLogout}
-            className="mt-8 w-full px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg"
+            className="w-full flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-500/10 rounded-xl transition-all"
           >
-            Logout
+            <LogOut size={20} />
+            <span>Logout</span>
           </button>
-
-        </nav>
+        </div>
       </aside>
 
       {/* Content Area */}
-      <main className="flex-1 p-10">
-        {activePage === "dashboard" ? children : renderContent()}
+      <main className="flex-1 bg-[#050505] overflow-hidden">
+        <div className="h-screen overflow-y-auto custom-scrollbar">
+          {children}
+        </div>
       </main>
     </div>
   );

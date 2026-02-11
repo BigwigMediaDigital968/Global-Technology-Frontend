@@ -90,7 +90,7 @@ export default function AdminLoginPage() {
           {/* Title */}
           <div className="text-center mb-10">
             <h1 className="text-3xl font-bold text-white mb-2">
-              Admin Login
+              G-Tech Admin
             </h1>
             <p className="text-gray-400 text-sm">
               Enter your credentials to access the panel
@@ -163,15 +163,15 @@ export default function AdminLoginPage() {
               type="submit"
               disabled={isLoading}
               className="relative w-full mt-6 py-4 rounded-xl font-semibold text-white
-              bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500
+              bg-[rgb(197,163,126)]
               hover:scale-[1.02]
               active:scale-[0.98]
               transition-all duration-300
-              shadow-lg shadow-purple-500/30
+              shadow-lg shadow-[rgb(197,163,126)]/30
               disabled:opacity-60 disabled:cursor-not-allowed
               flex items-center justify-center gap-2 overflow-hidden group"
             >
-              <span className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></span>
+              <span className="absolute inset-0 bg-[rgb(197,163,126)] blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></span>
 
               <span className="relative z-10 flex items-center gap-2">
                 {isLoading ? (

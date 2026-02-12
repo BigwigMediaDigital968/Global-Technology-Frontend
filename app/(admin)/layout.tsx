@@ -3,18 +3,22 @@
 import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  ChevronDown, 
-  Loader2, 
-  LayoutDashboard, 
-  Users, 
-  Package, 
-  Library, 
+import {
+  ChevronDown,
+  Loader2,
+  LayoutDashboard,
+  Users,
+  Package,
+  Library,
   Mail,
-  LogOut
+  LogOut,
 } from "lucide-react";
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -32,10 +36,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     } else if (pathname.includes("/leads")) {
       setActivePage("leads");
     } else if (pathname.includes("/collection")) {
-      setActivePage(pathname.includes("/create") ? "createCollection" : "collectionList");
+      setActivePage(
+        pathname.includes("/create") ? "createCollection" : "collectionList",
+      );
       setOpenMenu("collection");
     } else if (pathname.includes("/newsletter")) {
-      setActivePage(pathname.includes("/send-email") ? "sendEmail" : "emailList");
+      setActivePage(
+        pathname.includes("/send-email") ? "sendEmail" : "emailList",
+      );
       setOpenMenu("newsletter");
     }
   }, [pathname]);
@@ -130,7 +138,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <div className="flex min-h-screen bg-black text-white">
-
       {/* Sidebar */}
       <aside className="w-[280px] h-screen sticky top-0 bg-[#0a0a0a] border-r border-white/5 flex flex-col">
         <div className="p-8 flex flex-col items-center">
@@ -159,7 +166,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <button
               onClick={() => toggleMenu("products")}
               className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-300 ${
-                pathname.includes("/products") && activePage !== "leads"
+                pathname.includes("/products-list") && activePage !== "leads"
                   ? "text-white bg-white/5"
                   : "text-gray-400 hover:bg-white/5 hover:text-white"
               }`}
@@ -186,7 +193,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   className="ml-9 mt-1 space-y-1 overflow-hidden"
                 >
                   <button
-                    onClick={() => navigate("/products", "productList")}
+                    onClick={() => navigate("/products-list", "productList")}
                     className={`block w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${
                       activePage === "productList"
                         ? "text-[#c5a37e] font-bold"
@@ -265,7 +272,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     Collection List
                   </button>
                   <button
-                    onClick={() => navigate("/collection/create", "createCollection")}
+                    onClick={() =>
+                      navigate("/collection/create", "createCollection")
+                    }
                     className={`block w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${
                       activePage === "createCollection"
                         ? "text-[#c5a37e] font-bold"
@@ -321,7 +330,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     Email List
                   </button>
                   <button
-                    onClick={() => navigate("/newsletter/send-email", "sendEmail")}
+                    onClick={() =>
+                      navigate("/newsletter/send-email", "sendEmail")
+                    }
                     className={`block w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${
                       activePage === "sendEmail"
                         ? "text-[#c5a37e] font-bold"

@@ -46,39 +46,6 @@ export default function AdminLayout({
     return <>{children}</>;
   }
 
-  // return (
-  //   <div className="flex h-screen overflow-hidden bg-black text-white">
-  //     <Sidebar
-  //       collapsed={collapsed}
-  //       mobileOpen={mobileOpen}
-  //       setMobileOpen={setMobileOpen}
-  //     />
-
-  //     <main className="flex-1 bg-[#050505]">
-  //       {/* Top bar */}
-  //       <div className="h-16 flex items-center px-6 border-b border-white/5">
-  //         {/* Mobile menu */}
-  //         <button
-  //           className="md:hidden mr-4"
-  //           onClick={() => setMobileOpen(true)}
-  //         >
-  //           <Menu size={24} />
-  //         </button>
-
-  //         {/* Collapse toggle (desktop) */}
-  //         <button
-  //           className="hidden md:block text-sm px-3 py-1 bg-white/5 rounded-lg hover:bg-[#c5a37e] hover:text-black transition"
-  //           onClick={() => setCollapsed(!collapsed)}
-  //         >
-  //           {collapsed ? "Expand" : "Collapse"}
-  //         </button>
-  //       </div>
-
-  //       <div className="p-6">{children}</div>
-  //     </main>
-  //   </div>
-  // );
-
   return (
     <div className="flex h-screen overflow-hidden bg-black text-white">
       {/* Sidebar */}
@@ -102,10 +69,10 @@ export default function AdminLayout({
 
           {/* Collapse toggle (desktop) */}
           <button
-            className="hidden md:block text-sm px-3 py-1 bg-white/5 rounded-lg hover:bg-[#c5a37e] hover:text-black transition"
+            className="hidden md:block text-md border-2 cursor-pointer px-3 py-1 bg-white/5 rounded-lg hover:bg-[#c5a37e] hover:text-black transition"
             onClick={() => setCollapsed(!collapsed)}
           >
-            {collapsed ? "Expand" : "Collapse"}
+            {collapsed ? ">" : "<"}
           </button>
         </div>
 

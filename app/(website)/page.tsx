@@ -4,6 +4,7 @@ import AboutTrust from "../components/website/AboutTrust";
 import Industries from "../components/website/Industries";
 import LeadCTA from "../components/website/LeadCTA";
 import NewsLetter from "../components/website/NewsLetter";
+import ClientTestimonials from "../components/website/ClientTestimonials";
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
       <AboutTrust />
       <Industries />
       <LeadCTA />
+      <ClientTestimonials />
       <NewsLetter />
     </>
   );

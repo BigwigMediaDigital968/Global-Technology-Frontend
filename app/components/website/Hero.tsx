@@ -1,8 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 export default function Hero() {
+  const router = useRouter();
+
   return (
     <section className="relative h-[80vh] md:h-[90vh] w-full overflow-hidden bg-bg">
       <div className="absolute inset-0 z-0">
@@ -88,7 +91,10 @@ export default function Hero() {
             Get Quote
           </button>
 
-          <button className="rounded-md border px-8 py-4 bg-amber-200 text-black text-accent transition cursor-pointer hover:bg-transparent hover:text-white hover:border-amber-50 font-semibold border-black/50 transition hover:scale-105">
+          <button
+            onClick={() => router.push("/products")}
+            className="rounded-md border px-8 py-4 bg-amber-200 text-black text-accent transition cursor-pointer hover:bg-transparent hover:text-white hover:border-amber-50 font-semibold border-black/50 transition hover:scale-105"
+          >
             View Products
           </button>
         </motion.div>

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Trash2, Edit } from "lucide-react";
 import ConfirmModal from "@/app/components/shared/ConfirmModal";
+import Leads from "@/app/components/admin/LeadStats";
 
 interface Lead {
   _id: string;
@@ -86,6 +87,8 @@ export default function LeadsPage() {
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">Lead Management</h1>
+
+      <Leads lead={leads} />
 
       <div className="bg-[#0d0d0d] border border-white/5 rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">

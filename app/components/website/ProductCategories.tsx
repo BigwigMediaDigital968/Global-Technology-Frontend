@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 const categories = [
   {
@@ -30,6 +31,8 @@ const categories = [
 ];
 
 export default function ProductCategories() {
+  const router = useRouter();
+
   return (
     <section className="relative bg-bg py-24">
       <div className="mx-auto max-w-7xl px-6">
@@ -73,12 +76,30 @@ export default function ProductCategories() {
                   {item.desc}
                 </p>
 
-                <span className="mt-6 inline-block text-sm text-accent">
-                  Explore →
+                <span
+                  onClick={() => router.push("/user-login")}
+                  className="mt-6 inline-flex items-center gap-1 text-sm font-medium text-accent cursor-pointer transition-all duration-300 ease-out hover:text-amber-400 hover:scale-110"
+                >
+                  Explore
+                  <span className="transition-transform duration-300 group-hover:translate-x-1">
+                    →
+                  </span>
                 </span>
               </div>
             </motion.div>
           ))}
+        </div>
+
+        <div className="text-center py-5">
+          <span
+            onClick={() => router.push("/collection")}
+            className="mt-6 inline-flex items-center gap-1 border-2 px-3 py-2 text-sm font-medium text-accent cursor-pointer transition-all duration-300 ease-out hover:text-amber-400 hover:scale-110"
+          >
+            Explore Collections
+            <span className="transition-transform duration-300 group-hover:translate-x-1">
+              →
+            </span>
+          </span>
         </div>
       </div>
     </section>

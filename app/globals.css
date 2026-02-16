@@ -1,9 +1,5 @@
 @import "tailwindcss";
 
-/* ================================
-   GLOBAL TECHNOLOGIES – BRAND THEME
-================================ */
-
 :root {
   /* Core Brand Colors */
   --gt-primary: 11 28 45; /* #0B1C2D */

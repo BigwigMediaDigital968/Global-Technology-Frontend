@@ -141,8 +141,8 @@ export default function Sidebar({
           <NavButton
             icon={<Library size={20} />}
             label="Collection"
-            active={pathname.includes("/collection")}
-            onClick={() => toggleMenu("collection")}
+            active={pathname.includes("/collection-list")}
+            onClick={() => toggleMenu("collection-list")}
           />
           <Dropdown menu="collection">
             <SubItem

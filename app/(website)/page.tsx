@@ -3,6 +3,7 @@ import ProductCategories from "../components/website/ProductCategories";
 import AboutTrust from "../components/website/AboutTrust";
 import Industries from "../components/website/Industries";
 import LeadCTA from "../components/website/LeadCTA";
+import NewsLetter from "../components/website/NewsLetter";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       <AboutTrust />
       <Industries />
       <LeadCTA />
+      <NewsLetter />
     </>
   );
 }

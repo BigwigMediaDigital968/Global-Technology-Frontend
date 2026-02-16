@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { Loader2, Menu } from "lucide-react";
-import Sidebar from "../components/admin/Sidebar";
+import Sidebar from "@/app/components/admin/Sidebar";
 
 export default function AdminLayout({
   children,

@@ -2,6 +2,7 @@ import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { ModalProvider } from "./Context/ModalContext";
+import "quill/dist/quill.snow.css";
 
 const inter = Inter({ subsets: ["latin"] });
 

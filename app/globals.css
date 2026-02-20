@@ -56,3 +56,59 @@ body {
 .input:focus {
   border-color: #f59e0b;
 }
+
+/* ============================= */
+/* Dark Themed Quill Editor */
+/* ============================= */
+
+.ql-toolbar {
+  background-color: #111111 !important;
+  border: none !important;
+  border-bottom: 1px solid #262626 !important;
+}
+
+.ql-container {
+  background-color: #0d0d0d !important;
+  border: none !important;
+  color: #ffffff !important;
+  min-height: 200px;
+}
+
+.ql-editor {
+  color: #ffffff !important;
+  font-size: 15px;
+}
+
+.ql-editor.ql-blank::before {
+  color: #666 !important;
+}
+
+/* Icons */
+.ql-toolbar button svg {
+  filter: invert(1);
+}
+
+.ql-toolbar button:hover {
+  background-color: #1f1f1f !important;
+  border-radius: 6px;
+}
+
+/* Active button */
+.ql-toolbar button.ql-active {
+  background-color: #d4af37 !important;
+  border-radius: 6px;
+}
+
+/* Dropdowns */
+.ql-picker {
+  color: white !important;
+}
+
+.ql-picker-options {
+  background-color: #111111 !important;
+  border: 1px solid #333 !important;
+}
+
+.ql-picker-item:hover {
+  background-color: #1f1f1f !important;
+}

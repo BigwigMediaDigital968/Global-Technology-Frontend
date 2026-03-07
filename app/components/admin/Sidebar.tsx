@@ -144,16 +144,16 @@ export default function Sidebar({
             active={pathname.includes("/collection-list")}
             onClick={() => toggleMenu("collection-list")}
           />
-          <Dropdown menu="collection">
+          <Dropdown menu="collection-list">
             <SubItem
               label="Collection List"
-              active={pathname === "/collection"}
-              onClick={() => router.push("/collection")}
+              active={pathname === "/collection-list"}
+              onClick={() => router.push("/collection-list")}
             />
             <SubItem
               label="Create Collection"
-              active={pathname.includes("/collection/create")}
-              onClick={() => router.push("/collection/create")}
+              active={pathname.includes("/collection-list/create")}
+              onClick={() => router.push("/collection-list/create")}
             />
           </Dropdown>
         </div>

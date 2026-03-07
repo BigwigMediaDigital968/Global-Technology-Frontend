@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { Loader2, Menu } from "lucide-react";
 import Sidebar from "@/app/components/admin/Sidebar";
+import { Toaster } from "react-hot-toast";
 
 export default function AdminLayout({
   children,
@@ -78,6 +79,8 @@ export default function AdminLayout({
 
         {/* Scrollable Content Area */}
         <div className="flex-1 overflow-y-auto p-6">{children}</div>
+        <Toaster position="bottom-center" reverseOrder={false} />
+
       </main>
     </div>
   );

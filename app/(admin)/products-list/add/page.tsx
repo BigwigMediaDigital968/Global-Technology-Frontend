@@ -1,127 +1,108 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { motion } from "framer-motion";
-import { useParams } from "next/navigation";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BASE_URI;
 
 export default function CreateProduct() {
   const router = useRouter();
-  const [collections, setCollections] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
   const params = useParams();
+
   const productId = params?.id as string | undefined;
   const isEdit = Boolean(productId);
 
+  const [collections, setCollections] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [isSlugEdited, setIsSlugEdited] = useState(false);
+  const [message, setMessage] = useState("");
 
-  const [form, setForm] = useState<any>({
+  const [form, setForm] = useState({
     name: "",
     slug: "",
+    description: "",
     price: "",
-    images: [""], // UI preview only
-    sizes: [""],
+    images: [""],
+    sizes: [{ size: "", price: "" }],
     extraDetails: [{ key: "", value: "" }],
     faqs: [{ question: "", answer: "" }],
-    collection: "",
+    collectionName: "",
     status: "active",
   });
+
+  /* ================= FETCH COLLECTIONS ================= */
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/collections/admin`)
       .then((res) => res.json())
-      .then((res) => setCollections(res.data || res));
+      .then((res) => setCollections(res.data || []));
   }, []);
 
-  /* ================= IMAGE FILE HANDLING ================= */
-
-  const handleImageSelect = (files: FileList | null, index: number) => {
-    if (!files || !files[0]) return;
-
-    const file = files[0];
-
-    const updatedImages = [...form.images];
-    updatedImages[index] = URL.createObjectURL(file);
-
-    setForm({ ...form, images: updatedImages });
-
-    const updatedFiles = [...imageFiles];
-    updatedFiles[index] = file;
-    setImageFiles(updatedFiles);
-  };
-
-  /* ================= SUBMIT ================= */
-
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    setLoading(true);
-
-    const formData = new FormData();
-
-    formData.append("name", form.name);
-    if (form.slug) formData.append("slug", form.slug);
-    formData.append("price", String(form.price));
-    formData.append("collection", form.collection);
-    formData.append("status", form.status);
-
-    form.sizes.filter(Boolean).forEach((s: string) => {
-      formData.append("sizes[]", s);
-    });
-
-    form.extraDetails
-      .filter((d: any) => d.key && d.value)
-      .forEach((d: any) => {
-        formData.append(`extraDetails[${d.key}]`, d.value);
-      });
-
-    form.faqs.forEach((f: any, i: number) => {
-      formData.append(`faqs[${i}][question]`, f.question);
-      formData.append(`faqs[${i}][answer]`, f.answer);
-    });
-
-    imageFiles.forEach((file) => {
-      formData.append("images", file);
-    });
-
-    await fetch(
-      isEdit
-        ? `${API_BASE_URL}/api/products/admin/${productId}`
-        : `${API_BASE_URL}/api/products/admin`,
-      {
-        method: isEdit ? "PUT" : "POST",
-        body: formData,
-      },
-    );
-
-    router.push("/products-list");
-  };
+  /* ================= FETCH PRODUCT FOR EDIT ================= */
 
   useEffect(() => {
     if (!isEdit) return;
 
-    fetch(`${API_BASE_URL}/api/products/admin/${productId}`)
-      .then((res) => res.json())
-      .then((res) => {
-        const p = res.data || res;
+    async function fetchProduct() {
+      try {
+        const res = await fetch(
+          `${API_BASE_URL}/api/products/admin/${productId}`,
+        );
+
+        const json = await res.json();
+
+        const p = json.data || json;
 
         setForm({
-          name: p.name || "",
-          slug: p.slug || "",
-          price: String(p.price || ""),
-          images: p.images?.length ? p.images : [""], // existing cloudinary URLs
-          sizes: p.sizes?.length ? p.sizes : [""],
-          extraDetails: Object.entries(p.extraDetails || {}).map(
-            ([key, value]: any) => ({ key, value }),
-          ),
-          faqs: p.faqs?.length ? p.faqs : [{ question: "", answer: "" }],
-          collection: p.collection?._id || p.collection || "",
-          status: p.status || "active",
+          name: p?.name || "",
+          slug: p?.slug || "",
+          description: p?.description || "",
+          price: p?.price || "",
+
+          images: p?.images && p.images.length > 0 ? p.images : [""],
+
+          sizes:
+            p?.sizes && p.sizes.length > 0
+              ? p.sizes.map((s: any) => ({
+                  size: s.size || "",
+                  price: s.price || "",
+                }))
+              : [{ size: "", price: "" }],
+
+          extraDetails: p?.extraDetails
+            ? Object.entries(
+                p.extraDetails instanceof Map
+                  ? Object.fromEntries(p.extraDetails)
+                  : p.extraDetails,
+              ).map(([key, value]) => ({
+                key,
+                value: String(value),
+              }))
+            : [{ key: "", value: "" }],
+
+          faqs:
+            p?.faqs && Array.isArray(p.faqs) && p.faqs.length > 0
+              ? p.faqs.map((f: any) => ({
+                  question: String(f?.question || ""),
+                  answer: String(f?.answer || ""),
+                }))
+              : [{ question: "", answer: "" }],
+
+          collectionName: p?.collectionName?._id || p?.collectionName || "",
+
+          status: p?.status || "active",
         });
-      });
+      } catch (error) {
+        console.error("Failed to fetch product:", error);
+      }
+    }
+
+    fetchProduct();
   }, [isEdit, productId]);
+
+  /* ================= SLUG GENERATOR ================= */
 
   const generateSlug = (text: string) =>
     text
@@ -131,18 +112,119 @@ export default function CreateProduct() {
       .replace(/\s+/g, "-")
       .replace(/-+/g, "-");
 
+  /* ================= IMAGE HANDLING ================= */
+
+  const handleImageSelect = (files: FileList | null, index: number) => {
+    if (!files?.length) return;
+
+    const file = files[0];
+
+    const previews = [...form.images];
+    previews[index] = URL.createObjectURL(file);
+
+    const filesArr = [...imageFiles];
+    filesArr[index] = file;
+
+    setForm({ ...form, images: previews });
+    setImageFiles(filesArr);
+  };
+
+  /* ================= SUBMIT ================= */
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+
+    setLoading(true);
+    setMessage("");
+
+    const formData = new FormData();
+
+    formData.append("name", form.name);
+    if (form.slug) formData.append("slug", form.slug);
+    formData.append("description", form.description);
+    formData.append("price", form.price);
+    formData.append("collectionName", form.collectionName);
+    formData.append("status", form.status);
+
+    form.sizes
+      .filter((s: any) => s.size && s.price)
+      .forEach((s: any, i: number) => {
+        formData.append(`sizes[${i}][size]`, s.size);
+        formData.append(`sizes[${i}][price]`, String(s.price));
+      });
+
+    form.extraDetails.forEach((d: any) => {
+      if (d.key && d.value) {
+        formData.append(`extraDetails[${d.key}]`, d.value);
+      }
+    });
+
+    form.faqs
+      .filter((f: any) => f.question && f.answer)
+      .forEach((f: any, i: number) => {
+        formData.append(`faqs[${i}][question]`, f.question);
+        formData.append(`faqs[${i}][answer]`, f.answer);
+      });
+
+    imageFiles.forEach((file) => {
+      formData.append("images", file);
+    });
+
+    for (let pair of formData.entries()) {
+      console.log(pair[0], pair[1]);
+    }
+
+    try {
+      const res = await fetch(
+        isEdit
+          ? `${API_BASE_URL}/api/products/admin/${productId}`
+          : `${API_BASE_URL}/api/products/admin`,
+        {
+          method: isEdit ? "PUT" : "POST",
+          body: formData,
+        },
+      );
+
+      const json = await res.json();
+
+      if (json.success) {
+        setMessage(
+          isEdit
+            ? "Product updated successfully"
+            : "Product created successfully",
+        );
+
+        setTimeout(() => {
+          router.push("/products-list");
+        }, 1000);
+      } else {
+        setMessage("Something went wrong");
+      }
+    } catch {
+      setMessage("Server error");
+    }
+
+    setLoading(false);
+  };
+
   return (
     <motion.form
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       onSubmit={handleSubmit}
-      className="max-w-3xl mx-auto p-6 rounded-xl shadow space-y-6"
+      className="max-w-4xl mx-auto p-6 bg-transparent rounded-xl shadow space-y-6"
     >
       <h2 className="text-2xl font-bold">
         {isEdit ? "Edit Product" : "Create Product"}
       </h2>
 
-      {/* BASIC INFO */}
+      {message && (
+        <div className="bg-green-100 text-green-700 px-4 py-2 rounded">
+          {message}
+        </div>
+      )}
+
+      {/* NAME */}
       <input
         placeholder="Product Name"
         className="w-full border rounded-lg p-3"
@@ -159,82 +241,62 @@ export default function CreateProduct() {
         }}
       />
 
+      {/* SLUG */}
       <input
-        placeholder="Custom Slug (optional)"
+        placeholder="Custom Slug"
         className="w-full border rounded-lg p-3"
         value={form.slug}
         onChange={(e) => {
           setIsSlugEdited(true);
           setForm({ ...form, slug: e.target.value });
         }}
-        onBlur={() => {
-          // If user clears slug, resume auto-generation
-          if (!form.slug) setIsSlugEdited(false);
-        }}
       />
 
+      {/* Description */}
+      <textarea
+        placeholder="Product Description"
+        className="w-full border rounded-lg p-3"
+        rows={4}
+        value={form.description}
+        onChange={(e) => setForm({ ...form, description: e.target.value })}
+      />
+
+      {/* PRICE */}
       <input
         type="number"
         placeholder="Price (Rs.)"
         className="w-full border rounded-lg p-3"
-        required
+        // required
+        value={form.price}
         onChange={(e) => setForm({ ...form, price: e.target.value })}
       />
 
-      {/* IMAGES (UI SAME) */}
+      {/* IMAGES */}
       <div>
         <label className="font-medium">Images</label>
 
         {form.images.map((img: string, i: number) => (
-          <div key={i} className="mt-2">
+          <div key={i} className="mt-3 border p-3 rounded-lg">
             <input
               type="file"
               accept="image/*"
-              className="w-full border rounded-lg p-3"
               onChange={(e) => handleImageSelect(e.target.files, i)}
+              className="cursor-pointer"
             />
 
             {img && (
               <img
                 src={img}
-                className="mt-2 h-24 w-24 object-cover rounded"
+                className="mt-3 h-24 w-24 object-cover rounded border"
               />
             )}
-
-            <div className="flex gap-3 mt-2">
-              <button
-                type="button"
-                onClick={() => {
-                  if (i === 0) return;
-                  const imgs = [...form.images];
-                  [imgs[i - 1], imgs[i]] = [imgs[i], imgs[i - 1]];
-                  setForm({ ...form, images: imgs });
-                }}
-                className="text-sm"
-              >
-                ↑
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  if (i === form.images.length - 1) return;
-                  const imgs = [...form.images];
-                  [imgs[i + 1], imgs[i]] = [imgs[i], imgs[i + 1]];
-                  setForm({ ...form, images: imgs });
-                }}
-                className="text-sm"
-              >
-                ↓
-              </button>
-            </div>
           </div>
         ))}
 
         <button
           type="button"
           onClick={() => setForm({ ...form, images: [...form.images, ""] })}
-          className="text-sm text-blue-600 mt-2"
+          className="text-blue-600 text-sm mt-3 cursor-pointer"
         >
           + Add Image
         </button>
@@ -243,23 +305,43 @@ export default function CreateProduct() {
       {/* SIZES */}
       <div>
         <label className="font-medium">Sizes</label>
-        {form.sizes.map((size: string, i: number) => (
-          <input
-            key={i}
-            placeholder="Size (S, M, L...)"
-            className="w-full border rounded-lg p-3 mt-2"
-            value={size}
-            onChange={(e) => {
-              const sizes = [...form.sizes];
-              sizes[i] = e.target.value;
-              setForm({ ...form, sizes });
-            }}
-          />
+
+        {form.sizes.map((item: any, i: number) => (
+          <div key={i} className="grid grid-cols-2 gap-3 mt-2">
+            <input
+              placeholder="Size (S, M, L)"
+              className="border rounded-lg p-3"
+              value={item.size}
+              onChange={(e) => {
+                const arr = [...form.sizes];
+                arr[i].size = e.target.value;
+                setForm({ ...form, sizes: arr });
+              }}
+            />
+
+            <input
+              type="number"
+              placeholder="Price (Rs.)"
+              className="border rounded-lg p-3"
+              value={item.price}
+              onChange={(e) => {
+                const arr = [...form.sizes];
+                arr[i].price = e.target.value;
+                setForm({ ...form, sizes: arr });
+              }}
+            />
+          </div>
         ))}
+
         <button
           type="button"
-          onClick={() => setForm({ ...form, sizes: [...form.sizes, ""] })}
-          className="text-sm text-blue-600 mt-2"
+          onClick={() =>
+            setForm({
+              ...form,
+              sizes: [...form.sizes, { size: "", price: "" }],
+            })
+          }
+          className="text-blue-600 text-sm mt-2 cursor-pointer"
         >
           + Add Size
         </button>
@@ -268,30 +350,51 @@ export default function CreateProduct() {
       {/* EXTRA DETAILS */}
       <div>
         <label className="font-medium">Extra Details</label>
-        {form.extraDetails.map((item: any, i: number) => (
-          <div key={i} className="grid grid-cols-2 gap-2 mt-2">
+
+        {form.extraDetails.map((detail: any, i: number) => (
+          <div key={i} className="grid grid-cols-2 gap-3 mt-2">
+            {/* KEY */}
             <input
-              placeholder="Key"
-              className="border rounded-lg p-2"
-              value={item.key}
+              placeholder="Key (Material, Weight)"
+              className="border rounded-lg p-3"
+              value={detail.key}
               onChange={(e) => {
                 const arr = [...form.extraDetails];
                 arr[i].key = e.target.value;
                 setForm({ ...form, extraDetails: arr });
               }}
             />
+
+            {/* VALUE */}
             <input
               placeholder="Value"
-              className="border rounded-lg p-2"
-              value={item.value}
+              className="border rounded-lg p-3"
+              value={detail.value}
               onChange={(e) => {
                 const arr = [...form.extraDetails];
                 arr[i].value = e.target.value;
                 setForm({ ...form, extraDetails: arr });
               }}
             />
+
+            {/* REMOVE */}
+            {form.extraDetails.length > 1 && (
+              <button
+                type="button"
+                onClick={() => {
+                  const arr = [...form.extraDetails];
+                  arr.splice(i, 1);
+                  setForm({ ...form, extraDetails: arr });
+                }}
+                className="text-red-600 text-sm cursor-pointer col-span-2"
+              >
+                Remove Detail
+              </button>
+            )}
           </div>
         ))}
+
+        {/* ADD EXTRA DETAIL */}
         <button
           type="button"
           onClick={() =>
@@ -300,20 +403,38 @@ export default function CreateProduct() {
               extraDetails: [...form.extraDetails, { key: "", value: "" }],
             })
           }
-          className="text-sm text-blue-600 mt-2"
+          className="text-blue-600 text-sm mt-3 cursor-pointer"
         >
           + Add Detail
         </button>
       </div>
 
+      {/* COLLECTION */}
+      <select
+        value={form.collectionName}
+        onChange={(e) => setForm({ ...form, collectionName: e.target.value })}
+        className="w-full bg-transparent text-white border border-white rounded-lg p-3 cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#c5a37e]"
+      >
+        <option className="text-black" value="">
+          Select Collection
+        </option>
+
+        {collections.map((c) => (
+          <option className="text-black" key={c._id} value={c._id}>
+            {c.name}
+          </option>
+        ))}
+      </select>
+
       {/* FAQS */}
       <div>
         <label className="font-medium">FAQs</label>
+
         {form.faqs.map((faq: any, i: number) => (
-          <div key={i} className="space-y-2 mt-2">
+          <div key={i} className="border rounded-lg p-3 mt-3 space-y-2">
             <input
               placeholder="Question"
-              className="w-full border rounded-lg p-2"
+              className="w-full border rounded-lg p-3"
               value={faq.question}
               onChange={(e) => {
                 const arr = [...form.faqs];
@@ -321,9 +442,11 @@ export default function CreateProduct() {
                 setForm({ ...form, faqs: arr });
               }}
             />
-            <input
+
+            <textarea
               placeholder="Answer"
-              className="w-full border rounded-lg p-2"
+              className="w-full border rounded-lg p-3"
+              rows={3}
               value={faq.answer}
               onChange={(e) => {
                 const arr = [...form.faqs];
@@ -331,8 +454,25 @@ export default function CreateProduct() {
                 setForm({ ...form, faqs: arr });
               }}
             />
+
+            {/* REMOVE FAQ */}
+            {form.faqs.length > 1 && (
+              <button
+                type="button"
+                onClick={() => {
+                  const arr = [...form.faqs];
+                  arr.splice(i, 1);
+                  setForm({ ...form, faqs: arr });
+                }}
+                className="text-red-600 text-sm cursor-pointer"
+              >
+                Remove FAQ
+              </button>
+            )}
           </div>
         ))}
+
+        {/* ADD FAQ */}
         <button
           type="button"
           onClick={() =>
@@ -341,39 +481,29 @@ export default function CreateProduct() {
               faqs: [...form.faqs, { question: "", answer: "" }],
             })
           }
-          className="text-sm text-blue-600 mt-2"
+          className="text-blue-600 text-sm mt-3 cursor-pointer"
         >
           + Add FAQ
         </button>
       </div>
 
-      {/* COLLECTION */}
-      <select
-        className="w-full border rounded-lg p-3"
-        
-        onChange={(e) => setForm({ ...form, collection: e.target.value })}
-      >
-        <option value="">Select Collection</option>
-        {collections.map((c) => (
-          <option key={c._id} value={c._id}>
-            {c.name}
-          </option>
-        ))}
-      </select>
-
       {/* STATUS */}
       <select
-        className="w-full border rounded-lg p-3"
         value={form.status}
         onChange={(e) => setForm({ ...form, status: e.target.value })}
+        className="w-full bg-transparent text-white border border-white rounded-lg p-3 cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#c5a37e]"
       >
-        <option value="active">Active</option>
-        <option value="inactive">Inactive</option>
+        <option className="text-black" value="active">
+          Active
+        </option>
+        <option className="text-black" value="inactive">
+          Inactive
+        </option>
       </select>
 
       <button
         disabled={loading}
-        className="bg-[#c5a37e] hover:bg-[#b59572] transition text-black px-6 py-3 rounded-lg font-medium w-full"
+        className="bg-[#c5a37e] hover:bg-[#b59572] transition text-black px-6 py-3 rounded-lg font-medium w-full cursor-pointer"
       >
         {loading ? "Saving..." : isEdit ? "Update Product" : "Create Product"}
       </button>

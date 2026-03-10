@@ -33,9 +33,11 @@ export default function Sidebar({
      Auto open dropdown based on route
   ============================== */
   useEffect(() => {
-    if (pathname.includes("/products-list")) setOpenMenu("products");
-    if (pathname.includes("/collection")) setOpenMenu("collection");
-    if (pathname.includes("/newsletter")) setOpenMenu("newsletter");
+    if (pathname.startsWith("/products-list")) setOpenMenu("products");
+    else if (pathname.startsWith("/collection-list"))
+      setOpenMenu("collection-list");
+    else if (pathname.startsWith("/newsletter")) setOpenMenu("newsletter");
+    else setOpenMenu(null);
   }, [pathname]);
 
   const toggleMenu = (menu: string) => {
@@ -102,7 +104,7 @@ export default function Sidebar({
         <NavButton
           icon={<LayoutDashboard size={20} />}
           label="Dashboard"
-          active={pathname.includes("/admin-dashboard")}
+          active={pathname === "/admin-dashboard"}
           onClick={() => router.push("/admin-dashboard")}
         />
 
@@ -111,18 +113,18 @@ export default function Sidebar({
           <NavButton
             icon={<Package size={20} />}
             label="Products"
-            active={pathname.includes("/products")}
+            active={pathname.startsWith("/products-list")}
             onClick={() => toggleMenu("products")}
           />
           <Dropdown menu="products">
             <SubItem
               label="Product List"
-              active={pathname.includes("/products-list")}
+              active={pathname === "/products-list"}
               onClick={() => router.push("/products-list")}
             />
             <SubItem
               label="Add Product"
-              active={pathname.includes("/products-list/add")}
+              active={pathname === "/products-list/add"}
               onClick={() => router.push("/products-list/add")}
             />
           </Dropdown>
@@ -141,7 +143,7 @@ export default function Sidebar({
           <NavButton
             icon={<Library size={20} />}
             label="Collection"
-            active={pathname.includes("/collection-list")}
+            active={pathname.startsWith("/collection-list")}
             onClick={() => toggleMenu("collection-list")}
           />
           <Dropdown menu="collection-list">
@@ -152,7 +154,7 @@ export default function Sidebar({
             />
             <SubItem
               label="Create Collection"
-              active={pathname.includes("/collection-list/create")}
+              active={pathname === "/collection-list/create"}
               onClick={() => router.push("/collection-list/create")}
             />
           </Dropdown>
@@ -163,7 +165,7 @@ export default function Sidebar({
           <NavButton
             icon={<Mail size={20} />}
             label="Newsletter"
-            active={pathname.includes("/newsletter")}
+            active={pathname.startsWith("/newsletter")}
             onClick={() => toggleMenu("newsletter")}
           />
           <Dropdown menu="newsletter">

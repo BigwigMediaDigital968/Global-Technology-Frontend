@@ -13,17 +13,7 @@ export default function CollectionsPage() {
 
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [statusItem, setStatusItem] = useState<any>(null);
-
-  /* =============================
-     SEARCH
-  ============================== */
-
   const [search, setSearch] = useState("");
-
-  /* =============================
-     PAGINATION
-  ============================== */
-
   const [page, setPage] = useState(1);
   const limit = 5;
 
@@ -40,19 +30,21 @@ export default function CollectionsPage() {
       });
   }, []);
 
+  console.log(collections);
+
   /* =============================
      FILTER COLLECTIONS
   ============================== */
 
   const filteredCollections = collections.filter((c) =>
-    c.name.toLowerCase().includes(search.toLowerCase())
+    c.name.toLowerCase().includes(search.toLowerCase()),
   );
 
   const totalPages = Math.ceil(filteredCollections.length / limit);
 
   const paginatedCollections = filteredCollections.slice(
     (page - 1) * limit,
-    page * limit
+    page * limit,
   );
 
   /* =============================
@@ -89,8 +81,7 @@ export default function CollectionsPage() {
     if (!statusItem) return;
 
     try {
-      const newStatus =
-        statusItem.status === "active" ? "inactive" : "active";
+      const newStatus = statusItem.status === "active" ? "inactive" : "active";
 
       const res = await fetch(
         `${API}/api/collections/admin/${statusItem._id}`,
@@ -98,7 +89,7 @@ export default function CollectionsPage() {
           method: "PUT",
           body: JSON.stringify({ status: newStatus }),
           headers: { "Content-Type": "application/json" },
-        }
+        },
       );
 
       const data = await res.json();
@@ -107,8 +98,8 @@ export default function CollectionsPage() {
 
       setCollections((prev) =>
         prev.map((c) =>
-          c._id === statusItem._id ? { ...c, status: newStatus } : c
-        )
+          c._id === statusItem._id ? { ...c, status: newStatus } : c,
+        ),
       );
 
       toast.success(`Collection ${newStatus}`);
@@ -136,10 +127,7 @@ export default function CollectionsPage() {
       {/* SEARCH BAR */}
 
       <div className="mb-4 relative max-w-sm">
-        <Search
-          size={18}
-          className="absolute left-3 top-3 text-gray-400"
-        />
+        <Search size={18} className="absolute left-3 top-3 text-gray-400" />
         <input
           type="text"
           placeholder="Search collections..."
@@ -198,9 +186,7 @@ export default function CollectionsPage() {
 
                     <td className="p-3 font-medium">{c.name}</td>
 
-                    <td className="p-3">
-                      {c.products?.length || 0}
-                    </td>
+                    <td className="p-3">{c.products?.length || 0}</td>
 
                     {/* STATUS */}
 
@@ -232,10 +218,7 @@ export default function CollectionsPage() {
                         onClick={() => setDeleteId(c._id)}
                         className="cursor-pointer"
                       >
-                        <Trash2
-                          size={18}
-                          className="text-red-600"
-                        />
+                        <Trash2 size={18} className="text-red-600" />
                       </button>
                     </td>
                   </tr>
@@ -261,9 +244,7 @@ export default function CollectionsPage() {
               key={i}
               onClick={() => setPage(i + 1)}
               className={`px-3 py-1 border rounded ${
-                page === i + 1
-                  ? "bg-[#c5a37e] text-white"
-                  : ""
+                page === i + 1 ? "bg-[#c5a37e] text-white" : ""
               }`}
             >
               {i + 1}
@@ -287,7 +268,7 @@ export default function CollectionsPage() {
       {deleteId && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-xl w-[350px]">
-            <h3 className="text-lg font-semibold mb-3">
+            <h3 className="text-lg font-semibold mb-3 text-[#c5a37e]">
               Delete Collection
             </h3>
 
@@ -327,12 +308,7 @@ export default function CollectionsPage() {
 
             <p className="text-gray-600 mb-5 text-orange-500">
               Change collection status to{" "}
-              <b>
-                {statusItem.status === "active"
-                  ? "inactive"
-                  : "active"}
-              </b>
-              ?
+              <b>{statusItem.status === "active" ? "inactive" : "active"}</b>?
             </p>
 
             <div className="flex justify-end gap-3">

@@ -6,8 +6,8 @@ const partners = [
   "SHARP ENGINEERS",
   "ARKEL",
   "APSON MOTOR (INDIA) PVT. LTD.",
-  "NESL",
-  "GT",
+  "NBSL",
+  "MARAZZI",
 ];
 
 export default function AuthorizedPartners() {

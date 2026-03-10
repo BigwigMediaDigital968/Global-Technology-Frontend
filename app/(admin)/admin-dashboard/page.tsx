@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Package, Users, Library, Mail } from "lucide-react";
+import Link from "next/link";
 
 interface Stats {
   products: number;
@@ -26,9 +27,9 @@ export default function AdminDashboardPage() {
         const base = process.env.NEXT_PUBLIC_BASE_URI;
 
         const results = await Promise.allSettled([
-          fetch(`${base}/api/products`).then((res) => res.json()),
+          fetch(`${base}/api/products/admin`).then((res) => res.json()),
           fetch(`${base}/api/lead/get-lead`).then((res) => res.json()),
-          fetch(`${base}/api/collection`).then((res) => res.json()),
+          fetch(`${base}/api/collections/admin`).then((res) => res.json()),
           fetch(`${base}/api/newsletter/all`).then((res) => res.json()),
         ]);
 
@@ -55,6 +56,8 @@ export default function AdminDashboardPage() {
     fetchData();
   }, []);
 
+  console.log(stats);
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-[60vh] text-white">
@@ -79,24 +82,28 @@ export default function AdminDashboardPage() {
           icon={<Package size={22} />}
           label="Products"
           value={stats.products}
+          link="/products-list"
         />
 
         <StatCard
           icon={<Users size={22} />}
           label="Leads"
           value={stats.leads}
+          link="/leads"
         />
 
         <StatCard
           icon={<Library size={22} />}
           label="Collections"
           value={stats.collections}
+          link="/collection-list"
         />
 
         <StatCard
           icon={<Mail size={22} />}
           label="Subscribers"
           value={stats.subscribers}
+          link="/newsletter"
         />
       </div>
     </div>
@@ -106,14 +113,17 @@ export default function AdminDashboardPage() {
 /* =============================
    Stat Card
 ============================== */
-function StatCard({ icon, label, value }: any) {
+function StatCard({ icon, label, value, link }: any) {
   return (
-    <div className="relative backdrop-blur-xl bg-green-100 rounded-2xl shadow-xl p-6 transition-all duration-300 cursor-pointer">
-      <div className="flex items-center justify-between">
-        <div className="text-[#9d5100]">{icon}</div>
-        <span className="text-2xl font-bold text-[#9d5100]">{value}</span>
+    <Link href={link}>
+      <div className="relative backdrop-blur-xl bg-green-100 rounded-2xl shadow-xl p-6 transition-all duration-300 cursor-pointer hover:scale-[1.03] hover:shadow-2xl active:scale-[0.98]">
+        <div className="flex items-center justify-between">
+          <div className="text-[#9d5100]">{icon}</div>
+          <span className="text-2xl font-bold text-[#9d5100]">{value}</span>
+        </div>
+
+        <p className="mt-4 text-[#9d5100] text-sm">{label}</p>
       </div>
-      <p className="mt-4 text-[#9d5100] text-sm">{label}</p>
-    </div>
+    </Link>
   );
 }

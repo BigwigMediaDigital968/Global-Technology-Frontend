@@ -87,7 +87,10 @@ export default function Hero() {
             visible: { opacity: 1 },
           }}
         >
-          <button className="rounded-md bg-accent hover:bg-amber-200 hover:text-black px-8 py-4 border-2 font-semibold text-bg shadow-glow cursor-pointer transition hover:scale-105">
+          <button
+            onClick={() => router.push("/contact")}
+            className="rounded-md bg-accent hover:bg-amber-200 hover:text-black px-8 py-4 border-2 font-semibold text-bg shadow-glow cursor-pointer transition hover:scale-105"
+          >
             Get Quote
           </button>
 

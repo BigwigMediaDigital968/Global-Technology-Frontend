@@ -28,6 +28,9 @@ export default function Footer() {
         <div>
           <h4 className="mb-4 font-semibold text-amber-300">Categories</h4>
           <ul className="space-y-2 text-sm text-muted">
+            <li>
+              <a href="/collection">Collections</a>
+            </li>
             <li>Control Panels</li>
             <li>Door Operators</li>
             <li>Traction Machines</li>

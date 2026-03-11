@@ -5,6 +5,7 @@ import { ModalProvider } from "../Context/ModalContext";
 import FloatingActions from "../components/shared/FloatingActions";
 import { Toaster } from "react-hot-toast";
 import StickySocials from "../components/website/SocialMedia";
+import CookieConsent from "../components/website/CookieConsent";
 
 export default function WebsiteLayout({
   children,
@@ -15,6 +16,7 @@ export default function WebsiteLayout({
     <>
       <Navbar />
       <SmoothScroll />
+      <CookieConsent />
       {/* <ModalProvider> */}
       {children}
       <Toaster position="bottom-center" reverseOrder={false} />

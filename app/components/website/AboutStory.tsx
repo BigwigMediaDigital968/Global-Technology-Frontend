@@ -49,7 +49,7 @@ export function AboutStory() {
           </div>
 
           <p className="text-muted leading-relaxed text-[16px]">
-            Global Technologies was founded with a simple belief — elevator
+            Global Technologies was founded with a simple belief that elevator
             systems demand precision, reliability, and genuine components.
             Delays or compromises in quality directly impact safety and
             performance.

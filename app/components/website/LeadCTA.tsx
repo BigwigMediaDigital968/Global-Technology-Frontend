@@ -194,13 +194,20 @@ export default function LeadCTA() {
                   className="rounded-md bg-bg/70 border border-border px-4 py-3 outline-none focus:border-accent"
                 />
 
+                <input
+                  name="text"
+                  type="text"
+                  placeholder="Company Name"
+                  className="rounded-md bg-bg/70 border border-border px-4 py-3 outline-none focus:border-accent"
+                />
+
                 <textarea
                   name="message"
                   value={formData.message}
                   onChange={handleChange}
                   required
                   rows={4}
-                  placeholder="Product Requirement"
+                  placeholder="Share Requirement"
                   className="md:col-span-2 rounded-md bg-bg/70 border border-border px-4 py-3 outline-none focus:border-accent"
                 />
 

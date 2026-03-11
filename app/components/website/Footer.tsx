@@ -88,14 +88,14 @@ export default function Footer() {
               href="mailto:sales@globaltechnologies.in"
               className="text-sm text-muted hover:text-amber-200 hover:underline underline-offset-4 transition"
             >
-              sales@globaltechnologies.in
+              support@globaltechnologiesindia.com
             </a>
           </div>
 
           {/* Business Hours */}
           <div className="flex items-center gap-2 mt-3">
             <Clock size={16} className="text-amber-300" />
-            <p className="text-sm text-muted">Mon – Sat | 10 AM – 7 PM</p>
+            <p className="text-sm text-muted">Mon – Sat | 10 AM – 6 PM</p>
           </div>
         </div>
       </div>

@@ -7,7 +7,7 @@ export function ContactHero() {
     <section className="relative min-h-[60vh] bg-bg flex items-center">
       <div className="absolute inset-0 bg-accent/10 blur-3xl opacity-40" />
 
-      <div className="relative mx-auto max-w-7xl px-6">
+      <div className="relative mx-auto max-w-7xl px-6 md:pt-32 text-center">
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}

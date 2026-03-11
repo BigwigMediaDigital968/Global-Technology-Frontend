@@ -1,6 +1,6 @@
 export function AboutWhatWeDo() {
   return (
-    <section className="py-24 bg-bg border-t border-border">
+    <section className="py-24 bg-bg border-border">
       <div className="mx-auto max-w-7xl px-6">
         <h2 className="text-3xl font-bold text-center">What We Do</h2>
 

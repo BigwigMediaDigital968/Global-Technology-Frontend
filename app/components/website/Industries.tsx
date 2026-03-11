@@ -8,45 +8,38 @@ const industries = [
     title: "Residential Buildings",
     description:
       "Safe, smooth, and reliable elevator solutions for modern homes.",
-    bgImage:
-      "https://yapita-production.s3.ap-south-1.amazonaws.com/uploads/facility/seo_image/03060920-69f3-4d09-b224-5a2940884d52/file.webp",
+    bgImage: "/industry/residential-buildings.png",
   },
   {
     title: "Commercial Complexes",
     description:
       "High-capacity elevators built for heavy footfall and efficiency.",
-    bgImage:
-      "https://yapita-production.s3.ap-south-1.amazonaws.com/uploads/facility/seo_image/03060920-69f3-4d09-b224-5a2940884d52/file.webp",
+    bgImage: "/industry/commercial-complex.png",
   },
   {
     title: "Hospitals & Healthcare",
     description: "Precision elevators designed for patient safety and hygiene.",
-    bgImage:
-      "https://yapita-production.s3.ap-south-1.amazonaws.com/uploads/facility/seo_image/03060920-69f3-4d09-b224-5a2940884d52/file.webp",
+    bgImage: "/industry/hospital-healthcare.png",
   },
   {
     title: "Hotels & Hospitality",
     description: "Premium elevator experiences for comfort and luxury.",
-    bgImage:
-      "https://yapita-production.s3.ap-south-1.amazonaws.com/uploads/facility/seo_image/03060920-69f3-4d09-b224-5a2940884d52/file.webp",
+    bgImage: "/industry/hotels-hospitality.png",
   },
   {
     title: "Industrial Plants",
     description: "Heavy-duty elevators for demanding industrial environments.",
-    bgImage:
-      "https://yapita-production.s3.ap-south-1.amazonaws.com/uploads/facility/seo_image/03060920-69f3-4d09-b224-5a2940884d52/file.webp",
+    bgImage: "/industry/industrial-lift.png",
   },
   {
     title: "Shopping Malls",
     description: "Fast and durable elevator systems for retail spaces.",
-    bgImage:
-      "https://yapita-production.s3.ap-south-1.amazonaws.com/uploads/facility/seo_image/03060920-69f3-4d09-b224-5a2940884d52/file.webp",
+    bgImage: "/industry/shopping-mall.png",
   },
   {
     title: "Corporate Offices",
     description: "Smart elevators for seamless vertical mobility.",
-    bgImage:
-      "https://yapita-production.s3.ap-south-1.amazonaws.com/uploads/facility/seo_image/03060920-69f3-4d09-b224-5a2940884d52/file.webp",
+    bgImage: "/industry/corporate-offices.png",
   },
 ];
 
@@ -72,7 +65,7 @@ export default function Industries() {
   }, []);
 
   return (
-    <section className="relative bg-bg py-10 overflow-hidden">
+    <section className="relative bg-bg p-10 overflow-hidden">
       {/* Header */}
       <div className="mb-14 text-center">
         <h2 className="text-3xl md:text-4xl font-bold">

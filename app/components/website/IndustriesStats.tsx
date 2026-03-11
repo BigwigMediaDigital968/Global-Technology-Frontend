@@ -1,7 +1,7 @@
 export function IndustriesStats() {
   return (
-    <section className="py-20 bg-bg">
-      <div className="mx-auto max-w-7xl px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+    <section className="bg-bg md:pt-10">
+      <div className="mx-auto max-w-7xl px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center border border-amber-200 py-10">
         <div>
           <h3 className="text-4xl font-bold text-accent">15+</h3>
           <p className="text-muted">Industries Covered</p>

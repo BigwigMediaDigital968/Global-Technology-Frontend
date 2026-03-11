@@ -34,7 +34,7 @@ export default function ProductCategories() {
   const router = useRouter();
 
   return (
-    <section className="relative bg-bg py-24">
+    <section className="relative bg-bg py-14">
       <div className="mx-auto max-w-7xl px-6">
         {/* Section Heading */}
         <motion.div

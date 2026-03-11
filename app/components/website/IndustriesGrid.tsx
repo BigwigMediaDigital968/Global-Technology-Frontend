@@ -5,53 +5,48 @@ import { motion } from "framer-motion";
 const industries = [
   {
     title: "Residential Buildings",
-    image: "/industries/residential.jpg",
+    image: "/industry/residential-buildings.png",
     desc: "Reliable elevator components for apartments, societies & towers.",
   },
   {
     title: "Commercial Offices",
-    image: "/industries/commercial.jpg",
+    image: "/industry/commercial-complex.png",
     desc: "High-performance parts for corporate & IT buildings.",
   },
   {
     title: "Hospitals & Healthcare",
-    image: "/industries/hospital.jpg",
+    image: "/industry/hospital-healthcare.png",
     desc: "Precision & safety-focused elevator spares for healthcare.",
   },
   {
     title: "Hotels & Hospitality",
-    image: "/industries/hotel.jpg",
+    image: "/industry/hotels-hospitality.png",
     desc: "Silent, smooth, and reliable elevator solutions.",
   },
   {
     title: "Shopping Malls",
-    image: "/industries/mall.jpg",
+    image: "/industry/shopping-mall.png",
     desc: "High-traffic handling elevator components.",
   },
   {
     title: "Manufacturing Units",
-    image: "/industries/factory.jpg",
+    image: "/industry/industrial-lift.png",
     desc: "Industrial-grade lift spare parts.",
   },
   {
     title: "Warehouses & Logistics",
-    image: "/industries/warehouse.jpg",
+    image: "/industry/warehouse-lifts.png",
     desc: "Heavy-duty elevator & freight lift parts.",
   },
   {
     title: "Airports & Metro Stations",
-    image: "/industries/airport.jpg",
+    image: "/industry/airport-lifts.png",
     desc: "Mission-critical public infrastructure solutions.",
   },
   {
     title: "Educational Institutions",
-    image: "/industries/school.jpg",
+    image: "/industry/educational-buildings.png",
     desc: "Safe & durable elevator systems for campuses.",
-  },
-  {
-    title: "Government Buildings",
-    image: "/industries/government.jpg",
-    desc: "Certified & compliant elevator spare parts.",
   },
 ];
 
@@ -66,7 +61,7 @@ export function IndustriesGrid() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.05 }}
-            className="group relative overflow-hidden rounded-2xl border border-border bg-white/5 backdrop-blur-xl"
+            className="group relative overflow-hidden rounded-2xl border border-amber-300/50 bg-white/5 backdrop-blur-xl"
           >
             {/* image */}
             <div className="relative h-56 overflow-hidden">

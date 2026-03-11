@@ -4,11 +4,11 @@ import { motion } from "framer-motion";
 
 export function IndustriesHero() {
   return (
-    <section className="relative min-h-[70vh] bg-bg flex items-center overflow-hidden">
+    <section className="relative min-h-[60vh] bg-bg flex items-center overflow-hidden">
       {/* background glow */}
       <div className="absolute inset-0 bg-accent/10 blur-3xl opacity-40" />
 
-      <div className="relative mx-auto max-w-7xl px-6 text-center">
+      <div className="relative mx-auto max-w-7xl px-6 text-center md:pt-10">
         <motion.h1
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}

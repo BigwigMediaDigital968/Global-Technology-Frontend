@@ -34,7 +34,7 @@ export function AboutStory() {
   }, []);
 
   return (
-    <section className="py-28 bg-bg overflow-hidden">
+    <section className="py-20 bg-bg overflow-hidden">
       <div className="mx-auto max-w-7xl px-6 grid md:grid-cols-2 gap-30 items-center">
         {/* LEFT CONTENT */}
         <div>
@@ -79,7 +79,7 @@ export function AboutStory() {
 
           {/* Slider Card */}
 
-          <div className="relative bg-white rounded-[32px] shadow-2xl px-12 py-14 text-center max-w-md transition-all duration-500">
+          <div className="relative bg-white rounded-[32px] shadow-2xl px-12 py-14 text-center max-w-md transition-all duration-500 h-[320px]">
             <h3 className="text-2xl font-semibold text-amber-700">
               {slides[index].title}
             </h3>

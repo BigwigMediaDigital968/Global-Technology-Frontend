@@ -1,11 +1,22 @@
+"use client";
+
+import { Phone, Mail, Clock } from "lucide-react";
+
 export default function Footer() {
+  const phones = [
+    "+917290079120",
+    "+917290079121",
+    "+918750068007",
+    "+918750068008",
+  ];
+
   return (
     <footer className="bg-[#05080d] border-t border-amber-100/50">
-      <div className="mx-auto max-w-7xl px-6 py-16 grid gap-12 md:grid-cols-4">
+      <div className="mx-auto max-w-7xl px-6 py-16 grid gap-8 md:grid-cols-5">
         {/* Brand */}
         <div>
-          <h3 className="text-xl font-bold">
-            Global <span className="text-accent">Technologies</span>
+          <h3 className="text-xl font-bold text-amber-300">
+            Global <span className="text-white">Technologies</span>
           </h3>
           <p className="mt-4 text-sm text-muted">
             Trusted manufacturer & supplier of premium elevator spare parts
@@ -15,7 +26,7 @@ export default function Footer() {
 
         {/* Products */}
         <div>
-          <h4 className="mb-4 font-semibold">Categories</h4>
+          <h4 className="mb-4 font-semibold text-amber-300">Categories</h4>
           <ul className="space-y-2 text-sm text-muted">
             <li>Control Panels</li>
             <li>Door Operators</li>
@@ -26,24 +37,66 @@ export default function Footer() {
 
         {/* Company */}
         <div>
-          <h4 className="mb-4 font-semibold">Company</h4>
+          <h4 className="mb-4 font-semibold text-amber-300">Company</h4>
           <ul className="space-y-2 text-sm text-muted">
-            <li>About Us</li>
-            <li>Industries</li>
-            <li>Contact</li>
+            <li>
+              <a href="/about">About Us</a>
+            </li>
+            <li>
+              <a href="/industries">Industries</a>
+            </li>
+            <li>
+              <a href="/contact">Contact</a>
+            </li>
             <li>Careers</li>
           </ul>
         </div>
 
         {/* Policies */}
         <div>
-          <h4 className="mb-4 font-semibold">Policies</h4>
+          <h4 className="mb-4 font-semibold text-amber-300">Policies</h4>
           <ul className="space-y-2 text-sm text-muted">
             <li>Privacy Policy</li>
             <li>Terms & Conditions</li>
             <li>Refund Policy</li>
             <li>Disclaimer</li>
           </ul>
+        </div>
+
+        {/* Contact Info */}
+        <div>
+          <h4 className="mb-4 font-semibold text-amber-300">Contact</h4>
+
+          {/* Phone Numbers */}
+          <div className="grid grid-cols-1 gap-y-2 text-sm">
+            {phones.map((phone) => (
+              <a
+                key={phone}
+                href={`tel:${phone}`}
+                className="flex items-center gap-2 text-muted hover:text-amber-200 hover:underline underline-offset-4 transition"
+              >
+                <Phone size={16} className="text-amber-300" />
+                {phone.replace("+91", "+91 ")}
+              </a>
+            ))}
+          </div>
+
+          {/* Email */}
+          <div className="flex items-center gap-2 mt-4">
+            <Mail size={20} className="text-amber-300" />
+            <a
+              href="mailto:sales@globaltechnologies.in"
+              className="text-sm text-muted hover:text-amber-200 hover:underline underline-offset-4 transition"
+            >
+              sales@globaltechnologies.in
+            </a>
+          </div>
+
+          {/* Business Hours */}
+          <div className="flex items-center gap-2 mt-3">
+            <Clock size={16} className="text-amber-300" />
+            <p className="text-sm text-muted">Mon – Sat | 10 AM – 7 PM</p>
+          </div>
         </div>
       </div>
 

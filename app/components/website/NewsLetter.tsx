@@ -57,7 +57,7 @@ export default function Newsletter({
 
   // 🔥 THIS RETURN WAS MISSING
   return (
-    <section className="relative md:py-24 overflow-hidden">
+    <section className="relative md:py-24 pb-20 overflow-hidden">
       <div className="relative mx-auto max-w-4xl px-6">
         <div className="rounded-3xl border border-border bg-white/10 backdrop-blur-xl shadow-xl p-10 text-center">
           <h3 className="text-2xl md:text-3xl font-bold">{title}</h3>

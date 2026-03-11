@@ -3,11 +3,9 @@
 import { motion } from "framer-motion";
 import StatCounter from "./StatCounter";
 
-const partners = ["SHARP ENGINEERS", "ARKEL", "APSON", "NESL", "GT"];
-
 export default function AboutTrust() {
   return (
-    <section className="relative bg-bg py-10">
+    <section className="relative bg-bg md:py-24 py-12">
       <div className="mx-auto max-w-7xl px-6 grid gap-16 lg:grid-cols-2 items-center">
         {/* ABOUT CONTENT */}
         <motion.div
@@ -36,24 +34,6 @@ export default function AboutTrust() {
             support, and consistent availability of critical elevator
             components.
           </p>
-
-          {/* Authorized Brands */}
-          <div className="mt-8">
-            <h4 className="mb-4 font-semibold uppercase tracking-wide text-sm">
-              Authorized Distributor / Stockist
-            </h4>
-
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-              {partners.map((brand) => (
-                <div
-                  key={brand}
-                  className="rounded-lg border border-border bg-card px-4 py-3 text-center text-sm text-muted hover:text-accent transition"
-                >
-                  {brand}
-                </div>
-              ))}
-            </div>
-          </div>
         </motion.div>
 
         {/* TRUST STATS */}

@@ -4,6 +4,7 @@ import SmoothScroll from "@/app/components/shared/SmoothScroll";
 import { ModalProvider } from "../Context/ModalContext";
 import FloatingActions from "../components/shared/FloatingActions";
 import { Toaster } from "react-hot-toast";
+import StickySocials from "../components/website/SocialMedia";
 
 export default function WebsiteLayout({
   children,
@@ -19,6 +20,7 @@ export default function WebsiteLayout({
       <Toaster position="bottom-center" reverseOrder={false} />
       {/* </ModalProvider> */}
       <FloatingActions />
+      <StickySocials />
       <Footer />
     </>
   );

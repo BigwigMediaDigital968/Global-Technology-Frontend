@@ -18,14 +18,15 @@ export default function CreateProduct() {
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [isSlugEdited, setIsSlugEdited] = useState(false);
   const [message, setMessage] = useState("");
+  const [fileUpload, setFileUpload] = useState<File | null>(null);
 
   const [form, setForm] = useState({
     name: "",
     slug: "",
-    description: "",
-    price: "",
+    shortDescription: "",
+    longDescription: "",
     images: [""],
-    sizes: [{ size: "", price: "" }],
+    file: "",
     extraDetails: [{ key: "", value: "" }],
     faqs: [{ question: "", answer: "" }],
     collectionName: "",
@@ -58,18 +59,11 @@ export default function CreateProduct() {
         setForm({
           name: p?.name || "",
           slug: p?.slug || "",
-          description: p?.description || "",
-          price: p?.price || "",
+          shortDescription: p?.shortDescription || "",
+          longDescription: p?.longDescription || "",
+          file: p?.file || "",
 
           images: p?.images && p.images.length > 0 ? p.images : [""],
-
-          sizes:
-            p?.sizes && p.sizes.length > 0
-              ? p.sizes.map((s: any) => ({
-                  size: s.size || "",
-                  price: s.price || "",
-                }))
-              : [{ size: "", price: "" }],
 
           extraDetails: p?.extraDetails
             ? Object.entries(
@@ -141,17 +135,10 @@ export default function CreateProduct() {
 
     formData.append("name", form.name);
     if (form.slug) formData.append("slug", form.slug);
-    formData.append("description", form.description);
-    formData.append("price", form.price);
+    formData.append("shortDescription", form.shortDescription);
+    formData.append("longDescription", form.longDescription);
     formData.append("collectionName", form.collectionName);
     formData.append("status", form.status);
-
-    form.sizes
-      .filter((s: any) => s.size && s.price)
-      .forEach((s: any, i: number) => {
-        formData.append(`sizes[${i}][size]`, s.size);
-        formData.append(`sizes[${i}][price]`, String(s.price));
-      });
 
     form.extraDetails.forEach((d: any) => {
       if (d.key && d.value) {
@@ -169,6 +156,10 @@ export default function CreateProduct() {
     imageFiles.forEach((file) => {
       formData.append("images", file);
     });
+
+    if (fileUpload) {
+      formData.append("file", fileUpload);
+    }
 
     for (let pair of formData.entries()) {
       console.log(pair[0], pair[1]);
@@ -252,23 +243,20 @@ export default function CreateProduct() {
         }}
       />
 
-      {/* Description */}
       <textarea
-        placeholder="Product Description"
+        placeholder="Short Description"
         className="w-full border rounded-lg p-3"
-        rows={4}
-        value={form.description}
-        onChange={(e) => setForm({ ...form, description: e.target.value })}
+        rows={3}
+        value={form.shortDescription}
+        onChange={(e) => setForm({ ...form, shortDescription: e.target.value })}
       />
 
-      {/* PRICE */}
-      <input
-        type="number"
-        placeholder="Price (Rs.)"
-        className="w-full border rounded-lg p-3"
-        // required
-        value={form.price}
-        onChange={(e) => setForm({ ...form, price: e.target.value })}
+      <textarea
+        placeholder="Long Description"
+        className="w-full border rounded-lg p-3 mt-3"
+        rows={5}
+        value={form.longDescription}
+        onChange={(e) => setForm({ ...form, longDescription: e.target.value })}
       />
 
       {/* IMAGES */}
@@ -302,49 +290,65 @@ export default function CreateProduct() {
         </button>
       </div>
 
-      {/* SIZES */}
+      {/* FILE */}
       <div>
-        <label className="font-medium">Sizes</label>
+        <label className="font-medium block mb-2">
+          Product File (PDF / Catalogue)
+        </label>
 
-        {form.sizes.map((item: any, i: number) => (
-          <div key={i} className="grid grid-cols-2 gap-3 mt-2">
-            <input
-              placeholder="Size (S, M, L)"
-              className="border rounded-lg p-3"
-              value={item.size}
-              onChange={(e) => {
-                const arr = [...form.sizes];
-                arr[i].size = e.target.value;
-                setForm({ ...form, sizes: arr });
-              }}
-            />
+        <div
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={(e) => {
+            e.preventDefault();
+            const file = e.dataTransfer.files?.[0];
+            if (!file) return;
 
-            <input
-              type="number"
-              placeholder="Price (Rs.)"
-              className="border rounded-lg p-3"
-              value={item.price}
-              onChange={(e) => {
-                const arr = [...form.sizes];
-                arr[i].price = e.target.value;
-                setForm({ ...form, sizes: arr });
-              }}
-            />
-          </div>
-        ))}
-
-        <button
-          type="button"
-          onClick={() =>
-            setForm({
-              ...form,
-              sizes: [...form.sizes, { size: "", price: "" }],
-            })
-          }
-          className="text-blue-600 text-sm mt-2 cursor-pointer"
+            setFileUpload(file);
+          }}
+          className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-[#c5a37e] transition cursor-pointer bg-white/5"
         >
-          + Add Size
-        </button>
+          <input
+            type="file"
+            accept=".pdf"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (!file) return;
+
+              setFileUpload(file);
+            }}
+            className="hidden"
+            id="productFileUpload"
+          />
+
+          <label
+            htmlFor="productFileUpload"
+            className="cursor-pointer flex flex-col items-center gap-2"
+          >
+            <span className="text-3xl">📄</span>
+
+            <p className="text-sm text-gray-600">Drag & drop your PDF here</p>
+
+            <p className="text-xs text-gray-400">or click to browse</p>
+          </label>
+
+          {fileUpload && (
+            <p className="mt-3 text-sm text-green-600">
+              Selected: {fileUpload.name}
+            </p>
+          )}
+
+          {/* Existing file when editing */}
+          {form.file && !fileUpload && (
+            <a
+              href={`${API_BASE_URL}/${form.file}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 text-sm mt-3 underline"
+            >
+              View existing file
+            </a>
+          )}
+        </div>
       </div>
 
       {/* EXTRA DETAILS */}

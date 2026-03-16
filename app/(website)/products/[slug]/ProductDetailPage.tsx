@@ -1,26 +1,7 @@
-// "use client";
-
-// import ProductGallery from "../../../components/website/Product/ProductGallery";
-// import ProductInfo from "../../../components/website/Product/ProductInfo";
-// import RelatedProducts from "../../../components/website/Product/RelatedProducts";
-
-// export default function ProductDetailPage() {
-//   return (
-//     <section className="bg-bg">
-//       <div className="mx-auto max-w-7xl px-6 py-20 grid lg:grid-cols-2 gap-16">
-//         <ProductGallery />
-//         <ProductInfo />
-//       </div>
-
-//       <RelatedProducts
-//         title="Related Products"
-//         subtitle="Compatible components from the same category"
-//       />
-//     </section>
-//   );
-// }
-
 "use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 import ProductGallery from "../../../components/website/Product/ProductGallery";
 import ProductInfo from "../../../components/website/Product/ProductInfo";
@@ -41,8 +22,31 @@ interface Product {
 }
 
 export default function ProductDetailPage({ product }: { product: Product }) {
+  const router = useRouter();
+  const [authorized, setAuthorized] = useState(false);
+
+  /* -------- Lead Verification Check -------- */
+  useEffect(() => {
+    const verified = localStorage.getItem("lead_verified");
+
+    if (!verified) {
+      router.push(`/lead-login?redirect=/products/${product.slug}`);
+    } else {
+      setAuthorized(true);
+    }
+  }, [router, product.slug]);
+
+  /* -------- Prevent page render until verified -------- */
+  if (!authorized) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-muted">
+        Checking access...
+      </div>
+    );
+  }
+
   return (
-    <section className="bg-bg min-h-screen">
+    <section className="bg-bg min-h-screen pt-24">
       {/* Breadcrumb */}
       <nav className="px-6 pt-6 pb-0 max-w-7xl mx-auto flex items-center gap-2 text-xs text-muted">
         <span>Products</span>
@@ -65,7 +69,7 @@ export default function ProductDetailPage({ product }: { product: Product }) {
         </div>
       )}
 
-      {/* Tabs: description, extra details, FAQs */}
+      {/* Tabs */}
       <div className="mx-auto max-w-7xl px-6 pb-12">
         <ProductTabs product={product} />
       </div>

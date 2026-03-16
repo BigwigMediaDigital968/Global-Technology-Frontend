@@ -213,7 +213,6 @@ export default function ProductsPage() {
               <th className="p-3 text-left">Image</th>
               <th className="p-3 text-left">Name</th>
               {/* <th className="p-3 text-left">Slug</th> */}
-              <th className="p-3 text-left">Price</th>
               <th className="p-3 text-left">Collection</th>
               <th className="p-3 text-left">Status</th>
               <th className="p-3 text-left">Created</th>
@@ -268,8 +267,6 @@ export default function ProductsPage() {
                 <td className="p-3 font-medium">{product.name}</td>
 
                 {/* <td className="p-3 text-gray-600">{product.slug}</td> */}
-
-                <td className="p-3 font-medium">₹{product.price}</td>
 
                 <td className="p-3">{product.collectionName?.name || "-"}</td>
 

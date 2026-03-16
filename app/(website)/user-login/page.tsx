@@ -94,9 +94,11 @@ export default function LeadLoginPage() {
 
       toast.success("Verified successfully!");
 
-      // Save verification (temporary auth)
+      const expiryTime = Date.now() + 15 * 24 * 60 * 60 * 1000; // 15 days
+
       localStorage.setItem("lead_verified", "true");
       localStorage.setItem("lead_email", formData.email);
+      localStorage.setItem("lead_expiry", expiryTime.toString());
 
       router.push(redirectTo);
     } catch (error: any) {

@@ -1,31 +1,3 @@
-// "use client";
-
-// import { motion } from "framer-motion";
-
-// export default function ProductInfo() {
-//   return (
-//     <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }}>
-//       <h1 className="text-3xl font-bold">Elevator Control Panel – GT Series</h1>
-
-//       <p className="mt-4 text-muted">
-//         High-performance elevator control panel designed for commercial and
-//         residential applications.
-//       </p>
-
-//       <ul className="mt-6 space-y-2 text-sm text-muted">
-//         <li>✔ Compatible with multiple elevator systems</li>
-//         <li>✔ Industry safety compliant</li>
-//         <li>✔ Long operational lifespan</li>
-//         <li>✔ Easy installation & maintenance</li>
-//       </ul>
-
-//       <button className="mt-8 px-8 py-4 bg-accent text-bg rounded-lg shadow-glow hover:scale-105 transition">
-//         Request Quote
-//       </button>
-//     </motion.div>
-//   );
-// }
-
 "use client";
 
 import { motion } from "framer-motion";
@@ -65,9 +37,9 @@ export default function ProductInfo({ product }: { product: any }) {
 
       <h1 className="text-2xl font-semibold leading-snug">{product.name}</h1>
 
-      {product.description && (
+      {product.shortDescription && (
         <p className="text-sm text-muted leading-relaxed">
-          {product.description}
+          {product.shortDescription}
         </p>
       )}
 
@@ -89,18 +61,26 @@ export default function ProductInfo({ product }: { product: any }) {
       )}
 
       {/* Actions */}
-      <div className="flex gap-3 pt-1">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+        {/* Request Quote */}
         <button
           onClick={() =>
             router.push(`/user-login?redirect=/products/${product.slug}`)
           }
-          className="flex-1 py-3 rounded-lg bg-amber-200 text-black border border-amber-200/40 text-sm font-medium hover:bg-amber-300 transition"
+          className="w-full py-3 rounded-lg cursor-pointer bg-amber-200 text-black border border-amber-200/40 text-sm font-medium hover:bg-amber-300 transition"
         >
           Request Quote
         </button>
-        <button className="px-4 py-3 rounded-lg border border-border text-sm hover:bg-white/5 transition">
-          Download Datasheet
-        </button>
+
+        {/* Download Catalogue */}
+        <a
+          href={`${product.file}#toolbar=1`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-full text-center py-3 cursor-pointer rounded-lg border border-border text-sm hover:bg-white/5 transition"
+        >
+          Download Catalogue
+        </a>
       </div>
     </motion.div>
   );

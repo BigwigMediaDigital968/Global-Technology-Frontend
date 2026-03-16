@@ -1,62 +1,32 @@
-// "use client";
-
-// import { motion } from "framer-motion";
-// import { useRouter } from "next/navigation";
-
-// export default function ProductCard({
-//   name,
-//   category,
-// }: {
-//   name: string;
-//   category: string;
-// }) {
-//   const router = useRouter();
-//   return (
-//     <motion.div
-//       whileHover={{ y: -10 }}
-//       className="group rounded-xl border border-border bg-card p-6 shadow-card transition"
-//     >
-//       {/* Placeholder image */}
-//       <div className="mb-4 h-40 rounded-lg bg-black/40 flex items-center justify-center text-muted text-sm">
-//         Product Image
-//       </div>
-
-//       <h3 className="font-semibold mb-1 group-hover:text-accent transition">
-//         {name}
-//       </h3>
-
-//       <p className="text-xs text-muted mb-4">Category: {category}</p>
-
-//       <button
-//         onClick={() => router.push("/user-login")}
-//         className="w-full rounded-md cursor-pointer text-black border-amber-200/40 bg-amber-200 border border-accent py-2 text-sm text-accent hover:bg-accent hover:text-bg transition"
-//       >
-//         Get Quote
-//       </button>
-//     </motion.div>
-//   );
-// }
-
 "use client";
 
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-
-interface Product {
-  _id: string;
-  name: string;
-  slug: string;
-  images: string[];
-  price: number;
-  collectionName: { _id: string; name: string };
-}
+import { Product } from "../../types/product";
 
 export default function ProductCard({ product }: { product: Product }) {
   const router = useRouter();
 
   const handleGetQuote = () => {
-    // Passes the product detail page as redirect param
-    // LeadLoginPage reads ?redirect= and pushes there after OTP verification
+    const verified = localStorage.getItem("lead_verified");
+    const expiry = localStorage.getItem("lead_expiry");
+
+    if (verified && expiry) {
+      const expiryTime = parseInt(expiry);
+
+      // Check if lead is still valid (15 days)
+      if (Date.now() < expiryTime) {
+        router.push(`/products/${product.slug}`);
+        return;
+      }
+
+      // expired → clear data
+      localStorage.removeItem("lead_verified");
+      localStorage.removeItem("lead_email");
+      localStorage.removeItem("lead_expiry");
+    }
+
+    // Not verified → go to lead form
     router.push(`/user-login?redirect=/products/${product.slug}`);
   };
 
@@ -80,8 +50,10 @@ export default function ProductCard({ product }: { product: Product }) {
       <h3 className="font-semibold mb-1 group-hover:text-accent transition">
         {product.name}
       </h3>
-      <p className="text-xs text-muted mb-1">{product.collectionName?.name}</p>
-      <p className="text-xs text-amber-300 mb-4">From ${product.price}</p>
+
+      <p className="text-xs text-muted mb-4">{product.collectionName?.name}</p>
+
+      {/* <p className="text-xs text-amber-300 mb-4">From ${product.price}</p> */}
 
       <button
         onClick={handleGetQuote}

@@ -66,17 +66,17 @@ export default function Navbar() {
             {/* CTA */}
             <a
               href="/contact"
-              className="ml-4 rounded-md bg-accent px-5 py-2 text-sm font-semibold text-bg shadow-glow transition hover:scale-105 border-2"
+              className="ml-4 rounded-md bg-accent px-5 py-2 text-sm font-semibold text-black bg-amber-200 shadow-glow transition hover:scale-105 border-2 border-white/50"
             >
               Get Quote
             </a>
 
-            <a
+            {/* <a
               href="/login"
               className="ml-4 rounded-md bg-accent px-5 py-2 text-sm font-semibold text-black bg-amber-200 shadow-glow transition hover:scale-105 border-2 border-white/50"
             >
               Login
-            </a>
+            </a> */}
           </ul>
 
           {/* Mobile Toggle */}

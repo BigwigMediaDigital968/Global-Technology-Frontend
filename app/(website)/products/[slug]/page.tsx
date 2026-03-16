@@ -7,9 +7,12 @@ interface Props {
 export default async function ProductDetails({ params }: Props) {
   const { slug } = await params; // ← await params
 
-  const res = await fetch(`${process.env.BASE_URI}/api/products/${slug}`, {
-    cache: "no-store",
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URI}/api/products/${slug}`,
+    {
+      cache: "no-store",
+    },
+  );
 
   const data = await res.json();
 

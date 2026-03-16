@@ -9,6 +9,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_BASE_URI;
 export default function ViewProductPage() {
   const { id } = useParams();
   const router = useRouter();
+
   const [product, setProduct] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -68,10 +69,10 @@ export default function ViewProductPage() {
         </div>
 
         <div>
-          <span className="text-sm text-[rgb(var(--gt-muted))]">Price</span>
-          <p className="font-medium text-[rgb(var(--gt-accent))]">
-            ₹{product.price}
-          </p>
+          <span className="text-sm text-[rgb(var(--gt-muted))]">
+            Collection
+          </span>
+          <p>{product.collectionName?.name || "-"}</p>
         </div>
 
         <div>
@@ -87,14 +88,29 @@ export default function ViewProductPage() {
             {product.status}
           </span>
         </div>
-
-        <div>
-          <span className="text-sm text-[rgb(var(--gt-muted))]">
-            Collection
-          </span>
-          <p>{product.collectionName?.name || "-"}</p>
-        </div>
       </div>
+
+      {/* SHORT DESCRIPTION */}
+      {product.shortDescription && (
+        <div className="bg-[rgb(var(--gt-card))] border border-[rgb(var(--gt-border))] rounded-xl p-6">
+          <h3 className="font-semibold mb-3">Short Description</h3>
+
+          <p className="text-sm text-[rgb(var(--gt-muted))] leading-relaxed">
+            {product.shortDescription}
+          </p>
+        </div>
+      )}
+
+      {/* LONG DESCRIPTION */}
+      {product.longDescription && (
+        <div className="bg-[rgb(var(--gt-card))] border border-[rgb(var(--gt-border))] rounded-xl p-6">
+          <h3 className="font-semibold mb-3">Long Description</h3>
+
+          <p className="text-sm text-[rgb(var(--gt-muted))] leading-relaxed whitespace-pre-line">
+            {product.longDescription}
+          </p>
+        </div>
+      )}
 
       {/* IMAGES */}
       {product.images?.length > 0 && (
@@ -113,28 +129,35 @@ export default function ViewProductPage() {
         </div>
       )}
 
-      {/* SIZES */}
-      {product.sizes?.length > 0 && (
+      {/* PRODUCT FILE */}
+      {product.file && (
         <div className="bg-[rgb(var(--gt-card))] border border-[rgb(var(--gt-border))] rounded-xl p-6">
-          <h3 className="font-semibold mb-3">Sizes</h3>
+          <h3 className="font-semibold mb-3">Product File</h3>
 
-          <div className="flex gap-3 flex-wrap">
-            {product.sizes.map(
-              (s: { size: string; price: number }, i: number) => (
-                <span
-                  key={i}
-                  className="px-4 py-1.5 rounded-lg border border-[rgb(var(--gt-border))] text-sm bg-[rgb(var(--gt-primary))]"
-                >
-                  {s.size} • ₹{s.price}
-                </span>
-              ),
-            )}
+          <div className="flex gap-3">
+            {/* View */}
+            <a
+              href={`${product.file}#toolbar=1`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2 rounded-lg bg-[rgb(var(--gt-primary))] text-white text-sm"
+            >
+              View Catalogue
+            </a>
+
+            {/* Download */}
+            <a
+              href={`${product.file}?fl_attachment`}
+              className="px-4 py-2 rounded-lg border border-[rgb(var(--gt-border))] text-sm"
+            >
+              Download PDF
+            </a>
           </div>
         </div>
       )}
 
       {/* EXTRA DETAILS */}
-      {product.extraDetails && (
+      {product.extraDetails && Object.keys(product.extraDetails).length > 0 && (
         <div className="bg-[rgb(var(--gt-card))] border border-[rgb(var(--gt-border))] rounded-xl p-6">
           <h3 className="font-semibold mb-3">Extra Details</h3>
 
@@ -142,7 +165,7 @@ export default function ViewProductPage() {
             {Object.entries(product.extraDetails).map(([key, value]: any) => (
               <div
                 key={key}
-                className="flex gap-10 border p-2 text-sm border-b border-[rgb(var(--gt-border))] pb-1"
+                className="flex gap-10 border-b border-[rgb(var(--gt-border))] pb-1 text-sm"
               >
                 <span className="text-[rgb(var(--gt-muted))]">{key}:</span>
 

@@ -96,8 +96,6 @@ export default function CreateProduct() {
     fetchProduct();
   }, [isEdit, productId]);
 
-  /* ================= SLUG GENERATOR ================= */
-
   const generateSlug = (text: string) =>
     text
       .toLowerCase()
@@ -105,8 +103,6 @@ export default function CreateProduct() {
       .replace(/[^a-z0-9\s-]/g, "")
       .replace(/\s+/g, "-")
       .replace(/-+/g, "-");
-
-  /* ================= IMAGE HANDLING ================= */
 
   const handleImageSelect = (files: FileList | null, index: number) => {
     if (!files?.length) return;

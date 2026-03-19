@@ -177,6 +177,8 @@ export default function CreateProduct() {
 
       const json = await res.json();
 
+      console.log("Server response:", JSON.stringify(json, null, 2)); // ADD THIS
+
       if (json.success) {
         setMessage(
           isEdit
@@ -188,7 +190,8 @@ export default function CreateProduct() {
           router.push("/products-list");
         }, 1000);
       } else {
-        setMessage("Something went wrong");
+        setMessage(json.message || "Something went wrong");
+        console.error("Validation errors:", json.errors);
       }
     } catch {
       setMessage("Server error");

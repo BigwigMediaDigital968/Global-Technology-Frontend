@@ -140,18 +140,21 @@ export default function CreateProduct() {
     formData.append("collectionName", form.collectionName);
     formData.append("status", form.status);
 
-    form.extraDetails.forEach((d: any) => {
-      if (d.key && d.value) {
-        formData.append(`extraDetails[${d.key}]`, d.value);
-      }
-    });
+    // form.extraDetails.forEach((d: any) => {
+    //   if (d.key && d.value) {
+    //     formData.append(`extraDetails[${d.key}]`, d.value);
+    //   }
+    // });
 
-    form.faqs
-      .filter((f: any) => f.question && f.answer)
-      .forEach((f: any, i: number) => {
-        formData.append(`faqs[${i}][question]`, f.question);
-        formData.append(`faqs[${i}][answer]`, f.answer);
-      });
+    // form.faqs
+    //   .filter((f: any) => f.question && f.answer)
+    //   .forEach((f: any, i: number) => {
+    //     formData.append(`faqs[${i}][question]`, f.question);
+    //     formData.append(`faqs[${i}][answer]`, f.answer);
+    //   });
+
+    formData.append("extraDetails", JSON.stringify(form.extraDetails));
+    formData.append("faqs", JSON.stringify(form.faqs));
 
     imageFiles.forEach((file) => {
       formData.append("images", file);

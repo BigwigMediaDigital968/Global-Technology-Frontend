@@ -35,14 +35,6 @@ const testimonials = [
   },
 ];
 
-const logos = [
-  "/images/logo.jpeg",
-  "/images/logo.jpeg",
-  "/images/logo.jpeg",
-  "/images/logo.jpeg",
-  "/images/logo.jpeg",
-];
-
 export default function ClientTestimonials() {
   const [index, setIndex] = useState(0);
 
@@ -75,6 +67,8 @@ export default function ClientTestimonials() {
           craftsmanship.
         </p>
       </div>
+
+      {/* Controls */}
       <div className="max-w-7xl mx-auto flex justify-end items-center mb-12">
         <div className="flex gap-3">
           <button
@@ -94,7 +88,7 @@ export default function ClientTestimonials() {
 
       {/* Testimonials */}
       <div className="max-w-7xl mx-auto">
-        {/* Mobile: Only 1 Card */}
+        {/* Mobile */}
         <div className="block md:hidden">
           <motion.div
             key={index}
@@ -131,7 +125,7 @@ export default function ClientTestimonials() {
           </motion.div>
         </div>
 
-        {/* Desktop: 3 Cards Layout */}
+        {/* Desktop */}
         <div className="hidden md:grid grid-cols-4 gap-6">
           {visible.map((item, i) => {
             const featured = i === 0;
@@ -173,20 +167,6 @@ export default function ClientTestimonials() {
             );
           })}
         </div>
-      </div>
-
-      {/* Client Logos */}
-      <div className="max-w-6xl mx-auto mt-16 flex flex-wrap justify-center gap-10 opacity-70">
-        {logos.map((logo, i) => (
-          <Image
-            key={i}
-            src={logo}
-            alt="Client logo"
-            width={120}
-            height={40}
-            className="object-contain grayscale hover:grayscale-0 transition"
-          />
-        ))}
       </div>
     </section>
   );

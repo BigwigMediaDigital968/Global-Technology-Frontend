@@ -32,7 +32,7 @@ export default function MobileMenu({
 
           {/* Drawer */}
           <motion.aside
-            className="fixed right-0 top-0 z-60 h-full w-72 bg-bg border-l border-border p-6"
+            className="fixed right-0 top-0 z-500 h-full w-72 bg-bg border-l border-border p-6"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
@@ -47,7 +47,7 @@ export default function MobileMenu({
 
             <ul className="space-y-6">
               {navItems.map((item) => (
-                <li key={item.label}>
+                <li key={item.label} className="relative group">
                   <a
                     href={item.href}
                     onClick={onClose}
@@ -55,6 +55,9 @@ export default function MobileMenu({
                   >
                     {item.label}
                   </a>
+
+                  {/* Hover underline */}
+                  <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-amber-200 transition-all duration-300 group-hover:w-full" />
                 </li>
               ))}
             </ul>
@@ -62,7 +65,7 @@ export default function MobileMenu({
             <a
               href="/contact"
               onClick={onClose}
-              className="mt-10 block rounded-md bg-accent py-3 font-semibold text-center text-bg shadow-glow border-2"
+              className="mt-10 block rounded-md bg-accent py-3 font-semibold text-center text-bg shadow-glow border-2 hover:bg-amber-200 hover:text-black"
             >
               Get Quote
             </a>

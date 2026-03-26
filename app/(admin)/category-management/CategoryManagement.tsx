@@ -72,7 +72,7 @@ function Modal({
   );
 }
 
-/* ─── feedback modals ────────────────────────────────────── */
+// Success Modal
 function SuccessModal({
   open,
   message,

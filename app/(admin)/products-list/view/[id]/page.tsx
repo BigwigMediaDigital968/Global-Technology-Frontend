@@ -6,6 +6,17 @@ import { motion } from "framer-motion";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BASE_URI;
 
+// Paste at top of any file that renders categories
+function resolveCategories(raw: any): { _id: string; name: string }[] {
+  if (!raw) return [];
+  const arr = Array.isArray(raw) ? raw : [raw];
+  return arr.filter(Boolean).map((c) =>
+    typeof c === "string"
+      ? { _id: c, name: "—" } // unpopulated fallback
+      : { _id: c._id, name: c.name },
+  );
+}
+
 export default function ViewProductPage() {
   const { id } = useParams();
   const router = useRouter();
@@ -73,6 +84,34 @@ export default function ViewProductPage() {
             Collection
           </span>
           <p>{product.collectionName?.name || "-"}</p>
+        </div>
+
+        <div>
+          <span className="text-sm text-[rgb(var(--gt-muted))]">
+            Categories
+          </span>
+          {(() => {
+            const cats = Array.isArray(product.category)
+              ? product.category.filter(Boolean)
+              : product.category
+                ? [product.category]
+                : [];
+
+            return cats.length === 0 ? (
+              <p className="text-gray-400">—</p>
+            ) : (
+              <div className="flex flex-wrap gap-2 mt-1">
+                {cats.map((cat: any) => (
+                  <span
+                    key={cat._id}
+                    className="text-xs bg-[#c5a37e]/10 text-[#c5a37e] border border-[#c5a37e]/30 px-3 py-1 rounded-full"
+                  >
+                    {cat.name}
+                  </span>
+                ))}
+              </div>
+            );
+          })()}
         </div>
 
         <div>

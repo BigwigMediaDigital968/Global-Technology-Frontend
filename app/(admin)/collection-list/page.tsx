@@ -7,6 +7,17 @@ import toast from "react-hot-toast";
 
 const API = process.env.NEXT_PUBLIC_BASE_URI;
 
+// Paste at top of any file that renders categories
+function resolveCategories(raw: any): { _id: string; name: string }[] {
+  if (!raw) return [];
+  const arr = Array.isArray(raw) ? raw : [raw];
+  return arr.filter(Boolean).map((c) =>
+    typeof c === "string"
+      ? { _id: c, name: "—" } // unpopulated fallback
+      : { _id: c._id, name: c.name },
+  );
+}
+
 export default function CollectionsPage() {
   const [collections, setCollections] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -148,6 +159,7 @@ export default function CollectionsPage() {
             <tr>
               <th className="p-3 text-left">Image</th>
               <th className="p-3 text-left">Name</th>
+              <th className="p-3 text-left">Categories</th>
               <th className="p-3 text-left">Products</th>
               <th className="p-3 text-left">Status</th>
               <th className="p-3 text-left">Actions</th>
@@ -185,6 +197,56 @@ export default function CollectionsPage() {
                     </td>
 
                     <td className="p-3 font-medium">{c.name}</td>
+
+                    {/* <td className="p-3">
+                      {c.categories?.length ? (
+                        <div className="flex flex-wrap gap-1">
+                          {c.categories.slice(0, 3).map((cat: any) => (
+                            <span
+                              key={cat._id}
+                              className="text-xs bg-[#c5a37e]/10 text-[#c5a37e] border border-[#c5a37e]/20 px-2 py-0.5 rounded-full"
+                            >
+                              {cat.name}
+                            </span>
+                          ))}
+                          {c.categories.length > 3 && (
+                            <span className="text-xs text-gray-400">
+                              +{c.categories.length - 3} more
+                            </span>
+                          )}
+                        </div>
+                      ) : (
+                        <span className="text-xs text-gray-400">—</span>
+                      )}
+                    </td> */}
+                    <td className="p-3">
+                      {(() => {
+                        const cats = resolveCategories(c.categories);
+                        if (!cats.length)
+                          return (
+                            <span className="text-xs text-gray-400">
+                              No categories
+                            </span>
+                          );
+                        return (
+                          <div className="flex flex-wrap gap-1">
+                            {cats.slice(0, 3).map((cat) => (
+                              <span
+                                key={cat._id}
+                                className="text-xs bg-[#c5a37e]/10 text-[#c5a37e] border border-[#c5a37e]/20 px-2 py-0.5 rounded-full"
+                              >
+                                {cat.name}
+                              </span>
+                            ))}
+                            {cats.length > 3 && (
+                              <span className="text-xs text-gray-400 self-center">
+                                +{cats.length - 3} more
+                              </span>
+                            )}
+                          </div>
+                        );
+                      })()}
+                    </td>
 
                     <td className="p-3">{c.products?.length || 0}</td>
 

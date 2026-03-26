@@ -80,7 +80,6 @@ export default function AdminLayout({
         {/* Scrollable Content Area */}
         <div className="flex-1 overflow-y-auto p-6">{children}</div>
         <Toaster position="bottom-center" reverseOrder={false} />
-
       </main>
     </div>
   );

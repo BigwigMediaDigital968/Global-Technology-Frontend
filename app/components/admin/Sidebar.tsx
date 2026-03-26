@@ -11,6 +11,7 @@ import {
   Library,
   Mail,
   LogOut,
+  Tag,
 } from "lucide-react";
 
 interface Props {
@@ -55,7 +56,7 @@ export default function Sidebar({
         }
       `}
     >
-      <span className="group-hover:text-[#c5a37e] transition">{icon}</span>
+      <span className="group-hover:text-[#fff] transition">{icon}</span>
 
       {!collapsed && (
         <span className="relative">
@@ -108,34 +109,20 @@ export default function Sidebar({
           onClick={() => router.push("/admin-dashboard")}
         />
 
-        {/* Products */}
-        <div>
-          <NavButton
-            icon={<Package size={20} />}
-            label="Products"
-            active={pathname.startsWith("/products-list")}
-            onClick={() => toggleMenu("products")}
-          />
-          <Dropdown menu="products">
-            <SubItem
-              label="Product List"
-              active={pathname === "/products-list"}
-              onClick={() => router.push("/products-list")}
-            />
-            <SubItem
-              label="Add Product"
-              active={pathname === "/products-list/add"}
-              onClick={() => router.push("/products-list/add")}
-            />
-          </Dropdown>
-        </div>
-
         {/* Leads */}
         <NavButton
           icon={<Users size={20} />}
           label="Leads"
           active={pathname.includes("/leads")}
           onClick={() => router.push("/leads")}
+        />
+
+        {/* Leads */}
+        <NavButton
+          icon={<Tag size={20} />}
+          label="Category"
+          active={pathname.includes("/category-management")}
+          onClick={() => router.push("/category-management")}
         />
 
         {/* Collection */}
@@ -156,6 +143,28 @@ export default function Sidebar({
               label="Create Collection"
               active={pathname === "/collection-list/create"}
               onClick={() => router.push("/collection-list/create")}
+            />
+          </Dropdown>
+        </div>
+
+        {/* Products */}
+        <div>
+          <NavButton
+            icon={<Package size={20} />}
+            label="Products"
+            active={pathname.startsWith("/products-list")}
+            onClick={() => toggleMenu("products")}
+          />
+          <Dropdown menu="products">
+            <SubItem
+              label="Product List"
+              active={pathname === "/products-list"}
+              onClick={() => router.push("/products-list")}
+            />
+            <SubItem
+              label="Add Product"
+              active={pathname === "/products-list/add"}
+              onClick={() => router.push("/products-list/add")}
             />
           </Dropdown>
         </div>

@@ -35,7 +35,7 @@ interface Collection {
   name: string;
 }
 
-/* ─── tiny reusable modal shell ─────────────────────────── */
+// tiny reusable modal shell
 function Modal({
   open,
   onClose,

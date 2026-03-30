@@ -26,15 +26,25 @@ export default function ProductsPage() {
   const [confirmModal, setConfirmModal] = useState<any>(null);
   const [actionLoading, setActionLoading] = useState(false);
 
+  // Pagination Imaplementation
+  const [page, setPage] = useState(1);
+  const [limit] = useState(20);
+  const [totalPages, setTotalPages] = useState(1);
+
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/products/admin`)
+    setLoading(true);
+
+    fetch(`${API_BASE_URL}/api/products/admin?page=${page}&limit=${limit}`)
       .then((r) => r.json())
       .then((r) => {
-        if (r.success) setProducts(r.data);
+        if (r.success) {
+          setProducts(r.data);
+          setTotalPages(r.pagination.pages); // ← key
+        }
       })
       .catch(console.error)
       .finally(() => setLoading(false));
-  }, []);
+  }, [page]);
 
   // Collect unique category names across all products for filter dropdown
   const allCategories = Array.from(
@@ -363,6 +373,39 @@ export default function ProductsPage() {
             })}
           </tbody>
         </table>
+      </div>
+
+      {/* PAGINATION */}
+      <div className="flex justify-between items-center mt-6">
+        <button
+          onClick={() => setPage((p) => Math.max(p - 1, 1))}
+          disabled={page === 1}
+          className="px-4 py-2 border rounded-lg disabled:opacity-50 cursor-pointer"
+        >
+          Previous
+        </button>
+
+        <div className="flex gap-2">
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+            <button
+              key={p}
+              onClick={() => setPage(p)}
+              className={`px-3 py-1 rounded cursor-pointer ${
+                p === page ? "bg-[#c5a37e] text-black" : "border text-white"
+              }`}
+            >
+              {p}
+            </button>
+          ))}
+        </div>
+
+        <button
+          onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+          disabled={page === totalPages}
+          className="px-4 py-2 border rounded-lg disabled:opacity-50 cursor-pointer"
+        >
+          Next
+        </button>
       </div>
 
       {/* CONFIRM MODAL */}

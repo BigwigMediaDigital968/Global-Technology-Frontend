@@ -188,6 +188,11 @@ export default function Sidebar({
               active={pathname.includes("/newsletter/send-email")}
               onClick={() => router.push("/newsletter/send-email")}
             />
+            <SubItem
+              label="Manage Subscribers"
+              active={pathname.includes("/newsletter/subscriber-management")}
+              onClick={() => router.push("/newsletter/subscriber-management")}
+            />
           </Dropdown>
         </div>
       </nav>

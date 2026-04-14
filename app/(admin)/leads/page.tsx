@@ -23,6 +23,7 @@ export default function LeadsPage() {
   const [actionType, setActionType] = useState<"delete" | "verify" | null>(
     null,
   );
+  const [openMessageId, setOpenMessageId] = useState<string | null>(null);
 
   const base = process.env.NEXT_PUBLIC_BASE_URI;
 
@@ -84,6 +85,8 @@ export default function LeadsPage() {
     );
   }
 
+  console.log(leads);
+
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">Lead Management</h1>
@@ -98,6 +101,7 @@ export default function LeadsPage() {
                 <th className="p-4 text-left">Name</th>
                 <th className="p-4 text-left">Email</th>
                 <th className="p-4 text-left">Phone</th>
+                <th className="p-4 text-left">Message</th>
                 <th className="p-4 text-left">Verified</th>
                 <th className="p-4 text-center">Actions</th>
               </tr>
@@ -112,6 +116,27 @@ export default function LeadsPage() {
                   <td className="p-4">{lead.name}</td>
                   <td className="p-4">{lead.email}</td>
                   <td className="p-4">{lead.phone}</td>
+                  <td className="p-4">
+                    <div className="relative">
+                      <button
+                        onClick={() =>
+                          setOpenMessageId(
+                            openMessageId === lead._id ? null : lead._id,
+                          )
+                        }
+                        className="text-blue-400 hover:text-blue-300 text-xl cursor-pointer"
+                        title="click to show the message"
+                      >
+                        👁
+                      </button>
+
+                      {openMessageId === lead._id && (
+                        <div className="absolute left-6 top-1/2 -translate-y-1/2 w-64 bg-black text-white text-xs p-3 rounded-lg shadow-lg z-50 border border-white/10">
+                          {lead.message || "No message"}
+                        </div>
+                      )}
+                    </div>
+                  </td>
 
                   <td className="p-4">
                     <span
